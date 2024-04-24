@@ -41,6 +41,14 @@ public class ReposListFragment extends BaseFragment {
         searchBarHolder = getSearchBarHolderImpl();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (searchBarHolder != null) {
+            searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -41,17 +41,17 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     @Override
     public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
         if (event == Lifecycle.Event.ON_CREATE) {
-            searchGitRepos();
+            searchGitRepos(null);
         }
     }
 
     public void onSearchTextEntered(@Nullable final String text) {
-
+        searchGitRepos(text);
     }
 
-    private void searchGitRepos() {
+    private void searchGitRepos(@Nullable final String searchQuery) {
         searchReposComposable.clear();
-        searchReposComposable.add(interactor.searchGithubRepos()
+        searchReposComposable.add(interactor.searchGithubRepos(searchQuery)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onReposReceived, this::onFailedReposReceive));

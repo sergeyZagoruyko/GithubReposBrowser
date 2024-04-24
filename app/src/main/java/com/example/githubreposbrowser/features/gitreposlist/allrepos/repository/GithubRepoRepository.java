@@ -13,6 +13,10 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class GithubRepoRepository extends BaseRepository {
 
+    private static final String SORTING_FIELD_TYPE = "stars";
+    private static final String SORTING_ORDER = "desc";
+    private static final int PAGE_SIZE = 20;
+
     @NonNull
     private final ApiClient apiClient;
 
@@ -21,9 +25,8 @@ public class GithubRepoRepository extends BaseRepository {
         this.apiClient = apiClient;
     }
 
-    // TODO: Replace mocking code with impl once UI is ready
-    public Observable<List<GithubRepoResponse>> searchGithubRepos() {
-        return apiClient.searchRepositories("created:>2024-04-17", 20, 1).
-                map(GithubRepoListResponse::items);
+    public Observable<List<GithubRepoResponse>> searchGithubRepos(@NonNull final String searchQuery) {
+        return apiClient.searchRepositories(searchQuery, SORTING_FIELD_TYPE, SORTING_ORDER, PAGE_SIZE, 1)
+                .map(GithubRepoListResponse::items);
     }
 }

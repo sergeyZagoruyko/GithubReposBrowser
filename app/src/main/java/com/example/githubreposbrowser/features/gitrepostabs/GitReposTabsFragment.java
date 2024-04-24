@@ -22,8 +22,6 @@ import com.example.githubreposbrowser.listeners.OnTextChange;
 import com.example.githubreposbrowser.utils.ViewUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.lang.ref.WeakReference;
-
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class GitReposTabsFragment extends BaseFragment implements SearchBarHolder {
@@ -32,7 +30,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     private GitReposPagerAdapter adapter;
 
     @Nullable
-    private WeakReference<OnTextChange> onSearchTextChanged = null;
+    private OnTextChange onSearchTextChanged = null;
 
     @NonNull
     private final CompositeDisposable searchInputDisposable = new CompositeDisposable();
@@ -58,7 +56,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
 
     @Override
     public void setOnTextChangeListener(OnTextChange listener) {
-        onSearchTextChanged = new WeakReference<>(listener);
+        onSearchTextChanged = listener;
     }
 
     private void initTabs() {
@@ -86,8 +84,8 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     }
 
     private void onSearchTextEntered(final String text) {
-        if (onSearchTextChanged != null && onSearchTextChanged.get() != null) {
-            onSearchTextChanged.get().onTextChanged(text);
+        if (onSearchTextChanged != null) {
+            onSearchTextChanged.onTextChanged(text);
         }
     }
 
@@ -95,6 +93,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     public void onDestroyView() {
         super.onDestroyView();
         searchInputDisposable.clear();
+        onSearchTextChanged = null;
         binding.vpGitRepos.setAdapter(null);
     }
 }

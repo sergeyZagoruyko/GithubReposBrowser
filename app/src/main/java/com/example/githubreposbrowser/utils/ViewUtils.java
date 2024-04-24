@@ -33,7 +33,6 @@ public class ViewUtils {
                         return false;
                     }
                 }))
-                .map(text -> text.toLowerCase().trim())
                 .debounce(SEARCH_INPUT_DEBOUNCE_MS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callback::onTextChanged);
