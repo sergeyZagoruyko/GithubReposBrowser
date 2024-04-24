@@ -2,6 +2,7 @@ package com.example.githubreposbrowser.di.component;
 
 import com.example.githubreposbrowser.base.App;
 import com.example.githubreposbrowser.di.module.AppModule;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 
 import javax.inject.Singleton;
 
@@ -16,4 +17,6 @@ public interface AppComponent {
     interface Factory {
         AppComponent create(@BindsInstance App app);
     }
+
+    RepoListFrmComponent.Factory plusRepoListFrm();
 }

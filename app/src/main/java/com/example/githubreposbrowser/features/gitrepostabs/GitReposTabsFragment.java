@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposTabsBinding;
+import com.example.githubreposbrowser.di.component.AppComponent;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class GitReposTabsFragment extends BaseFragment {
@@ -25,6 +26,11 @@ public class GitReposTabsFragment extends BaseFragment {
 
         initTabs();
         return binding.getRoot();
+    }
+
+    @Override
+    public void setupDI(AppComponent appComponent) {
+
     }
 
     private void initTabs() {

@@ -1,5 +1,6 @@
-package com.example.githubreposbrowser.features.gitreposlist;
+package com.example.githubreposbrowser.features.gitreposlist.allrepos.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,19 +8,29 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
 
-public class FavoriteReposListFragment extends BaseFragment {
+public class ReposListFragment extends BaseFragment {
 
     private FragmentGitReposListBinding binding;
+    private ReposListViewModel viewModel;
 
     @NonNull
-    public static FavoriteReposListFragment newInstance() {
-        return new FavoriteReposListFragment();
+    public static ReposListFragment newInstance() {
+        return new ReposListFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        getLifecycle().addObserver(viewModel);
     }
 
     @Nullable
@@ -33,11 +44,12 @@ public class FavoriteReposListFragment extends BaseFragment {
 
     @Override
     public void setupDI(AppComponent appComponent) {
-
+        RepoListFrmComponent component = appComponent.plusRepoListFrm().create();
+        component.inject(this);
+        viewModel = new ViewModelProvider(this, component.vm()).get(ReposListViewModel.class);
     }
 
     private void initUI() {
-        binding.tvText.setText(getString(R.string.favorite_repos_tab_title));
+        binding.tvText.setText(getString(R.string.all_repos_tab_title));
     }
 }
-

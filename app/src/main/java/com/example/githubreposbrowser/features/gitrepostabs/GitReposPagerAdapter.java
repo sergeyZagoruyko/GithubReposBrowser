@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.githubreposbrowser.R;
-import com.example.githubreposbrowser.features.gitreposlist.AllReposListFragment;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.ReposListFragment;
 import com.example.githubreposbrowser.features.gitreposlist.FavoriteReposListFragment;
 
 public class GitReposPagerAdapter extends FragmentStateAdapter {
@@ -49,11 +49,11 @@ public class GitReposPagerAdapter extends FragmentStateAdapter {
 
         public Fragment getFragment() {
             if (this == ALL_REPOS) {
-                return AllReposListFragment.newInstance();
+                return ReposListFragment.newInstance();
             } else if (this == FAVORITES) {
                 return FavoriteReposListFragment.newInstance();
             } else {
-                return AllReposListFragment.newInstance();
+                return ReposListFragment.newInstance();
             }
         }
     }
