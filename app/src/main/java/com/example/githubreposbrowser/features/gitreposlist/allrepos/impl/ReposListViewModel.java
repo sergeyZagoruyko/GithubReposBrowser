@@ -11,9 +11,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.githubreposbrowser.base.BaseViewModel;
 import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepoListData;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubReposInteractor;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
+import com.example.githubreposbrowser.utils.SingleLiveEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,10 +27,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ReposListViewModel extends BaseViewModel implements LifecycleEventObserver {
 
+    private static final int DEF_CURRENT_PAGE = 1;
+
     @NonNull
     private final MutableLiveData<ScreenState> _screenState = new MutableLiveData<>();
     @NonNull
     public final LiveData<ScreenState> screenState = _screenState;
+    @NonNull
+    public final SingleLiveEvent<String> errorToast = new SingleLiveEvent();
 
     @NonNull
     private final GithubReposInteractor interactor;
@@ -39,6 +46,13 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     private GitReposFilterType currentFilterType = GitReposFilterType.getDefaultValue();
     @Nullable
     private String searchQuery = null;
+    private int currentPage = DEF_CURRENT_PAGE;
+    private int totalAvailableItemsCount;
+
+    @NonNull
+    private List<GithubRepo> githubRepos = new ArrayList<>();
+    @NonNull
+    private final GithubRepo loaderItem = GithubRepo.newInstanceLoader();
 
     @Inject
     public ReposListViewModel(@NonNull final GithubReposInteractor interactor) {
@@ -53,6 +67,8 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     }
 
     public void onRefreshRepos() {
+        currentPage = DEF_CURRENT_PAGE;
+        githubRepos = new ArrayList<>();
         searchGitRepos(searchQuery, currentFilterType, true);
     }
 
@@ -66,22 +82,57 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
         searchGitRepos(searchQuery, currentFilterType, false);
     }
 
-    private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType, final boolean refreshing) {
-        _screenState.setValue(ScreenState.loading(true, refreshing));
+    public void onScrolledToNext() {
+        if (githubRepos.size() >= totalAvailableItemsCount) {
+            return;
+        }
+        currentPage++;
+        setLoaderItemVisibility(true);
+        _screenState.setValue(ScreenState.success(githubRepos));
+        searchGitRepos(searchQuery, currentFilterType, false);
+    }
+
+
+    private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType,
+                                final boolean refreshing) {
+        if (currentPage <= DEF_CURRENT_PAGE) {
+            _screenState.setValue(ScreenState.loading(true, refreshing));
+        }
         searchReposComposable.clear();
-        searchReposComposable.add(interactor.searchGithubRepos(searchQuery, filterType)
+        searchReposComposable.add(interactor.searchGithubRepos(searchQuery, filterType, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onReposReceived, this::onFailedReposReceive));
     }
 
-    private void onReposReceived(List<GithubRepo> list) {
-        _screenState.setValue(ScreenState.success(list));
+    private void onReposReceived(@NonNull final GithubRepoListData listData) {
+        totalAvailableItemsCount = listData.totalCount();
+        setLoaderItemVisibility(false);
+
+        final List<GithubRepo> updatedList = new ArrayList<>(githubRepos);
+        updatedList.addAll(listData.items());
+        githubRepos = updatedList;
+
+        _screenState.setValue(ScreenState.success(githubRepos));
     }
 
     private void onFailedReposReceive(final Throwable error) {
         final String errorContent = error.getMessage() != null ? error.getMessage() : "";
+        if (currentPage > DEF_CURRENT_PAGE) {
+            errorToast.setValue(errorContent);
+            return;
+        }
         _screenState.setValue(ScreenState.error(errorContent));
+    }
+
+    private void setLoaderItemVisibility(final boolean visible) {
+        if (visible) {
+            if (!githubRepos.contains(loaderItem)) {
+                githubRepos.add(GithubRepo.newInstanceLoader());
+            }
+        } else {
+            githubRepos.remove(loaderItem);
+        }
     }
 
     @Override

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pbItemLoader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_loader_height"
+    android:paddingTop="@dimen/base_margin"
+    android:paddingBottom="@dimen/base_margin" />

@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
@@ -23,6 +25,7 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoList
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
 import com.example.githubreposbrowser.listeners.onItemSelectedListener;
+import com.example.githubreposbrowser.utils.PagingScrollChangeListener;
 
 import java.util.List;
 
@@ -69,6 +72,7 @@ public class ReposListFragment extends BaseFragment {
     protected void setupObservers() {
         super.setupObservers();
         observeNonNull(viewModel.screenState, this::onScreenStateChanged);
+        observeNonNull(viewModel.errorToast, text -> Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show());
     }
 
     @Override
@@ -81,10 +85,16 @@ public class ReposListFragment extends BaseFragment {
                     viewModel.onFilterItemSelected(item));
         }
         binding.swipeRefreshRepos.setOnRefreshListener(() -> viewModel.onRefreshRepos());
+        if (binding.rvGithubRepos.getLayoutManager() != null) {
+            binding.rvGithubRepos.setOnScrollChangeListener(
+                    new PagingScrollChangeListener((LinearLayoutManager) binding.rvGithubRepos.getLayoutManager(),
+                            () -> viewModel.onScrolledToNext()));
+        }
     }
 
     private void initUI() {
         binding.rvGithubRepos.setAdapter(adapter);
+        binding.rvGithubRepos.setItemAnimator(null);
     }
 
     private void onScreenStateChanged(@NonNull final ScreenState state) {
@@ -142,5 +152,6 @@ public class ReposListFragment extends BaseFragment {
             searchBarHolder.setOnFilterClickedListener(null);
         }
         binding.rvGithubRepos.setAdapter(null);
+        binding.rvGithubRepos.setOnScrollChangeListener(null);
     }
 }

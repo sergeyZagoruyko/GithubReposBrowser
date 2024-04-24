@@ -12,6 +12,7 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.repository.
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -36,11 +37,16 @@ public class GithubReposInteractor extends BaseInteractor {
         this.filterDateConvertor = filterDateConvertor;
     }
 
-    public Single<List<GithubRepo>> searchGithubRepos(@Nullable final String query, @NonNull final GitReposFilterType filterType) {
-        return repository.searchGithubRepos(buildSearchRequestQuery(query, filterType))
-                .flatMapIterable(list -> list)
-                .map(mapper::mapToUI)
-                .toList();
+    public Single<GithubRepoListData> searchGithubRepos(@Nullable final String query,
+                                                        @NonNull final GitReposFilterType filterType, final int page) {
+        return repository.searchGithubRepos(buildSearchRequestQuery(query, filterType), page)
+                .map(response -> {
+                    List<GithubRepo> repos = response.items()
+                            .stream()
+                            .map(mapper::mapToUI)
+                            .collect(Collectors.toList());
+                    return new GithubRepoListData(response.totalCount(), repos);
+                }).singleOrError();
     }
 
     @NonNull

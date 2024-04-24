@@ -5,8 +5,6 @@ import androidx.annotation.NonNull;
 import com.example.githubreposbrowser.api.ApiClient;
 import com.example.githubreposbrowser.base.BaseRepository;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -25,8 +23,7 @@ public class GithubRepoRepository extends BaseRepository {
         this.apiClient = apiClient;
     }
 
-    public Observable<List<GithubRepoResponse>> searchGithubRepos(@NonNull final String searchQuery) {
-        return apiClient.searchRepositories(searchQuery, SORTING_FIELD_TYPE, SORTING_ORDER, PAGE_SIZE, 1)
-                .map(GithubRepoListResponse::items);
+    public Observable<GithubRepoListResponse> searchGithubRepos(@NonNull final String searchQuery, final int page) {
+        return apiClient.searchRepositories(searchQuery, SORTING_FIELD_TYPE, SORTING_ORDER, PAGE_SIZE, page);
     }
 }

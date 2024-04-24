@@ -10,33 +10,52 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.databinding.ItemGithubRepoBinding;
+import com.example.githubreposbrowser.databinding.ItemLoaderBinding;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
+import com.example.githubreposbrowser.view.LoaderIListItemViewHolder;
 
-public class RepoListAdapter extends ListAdapter<GithubRepo, RepoListAdapter.ViewHolder> {
+public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHolder> {
+
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_LOADER = 1;
 
     protected RepoListAdapter() {
         super(new GithubRepoDiffUtilCallback());
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return (getCurrentList().size() - 1 >= position && !getCurrentList().get(position).isLoader())
+                ? TYPE_ITEM : TYPE_LOADER;
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        final ItemGithubRepoBinding binding = ItemGithubRepoBinding.inflate(inflater, parent, false);
-        return new ViewHolder(binding);
+        if (viewType == TYPE_ITEM) {
+            final ItemGithubRepoBinding binding = ItemGithubRepoBinding.inflate(inflater, parent, false);
+            return new ItemViewHolder(binding);
+        } else {
+            final ItemLoaderBinding binding = ItemLoaderBinding.inflate(inflater, parent, false);
+            return new LoaderIListItemViewHolder(binding);
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(getItem(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolder) {
+            ((ItemViewHolder) holder).bind(getItem(position));
+        }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
         private final ItemGithubRepoBinding binding;
 
-        public ViewHolder(@NonNull final ItemGithubRepoBinding binding) {
+        public ItemViewHolder(@NonNull final ItemGithubRepoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -52,4 +71,5 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RepoListAdapter.Vie
             binding.tvStarsCount.setText(String.valueOf(item.starsCount()));
         }
     }
+
 }
