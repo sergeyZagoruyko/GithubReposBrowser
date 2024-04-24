@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.example.githubreposbrowser.base.BaseInteractor;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.repository.GithubRepoRepository;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -25,24 +25,29 @@ public class GithubReposInteractor extends BaseInteractor {
     @NonNull
     private final GithubRepoMapper mapper;
 
+    @NonNull
+    private final FilterDateConvertor filterDateConvertor;
+
     @Inject
-    public GithubReposInteractor(@NonNull final GithubRepoRepository repository, @NonNull final GithubRepoMapper mapper) {
+    public GithubReposInteractor(@NonNull final GithubRepoRepository repository, @NonNull final GithubRepoMapper mapper,
+                                 @NonNull final FilterDateConvertor filterDateConvertor) {
         this.repository = repository;
         this.mapper = mapper;
+        this.filterDateConvertor = filterDateConvertor;
     }
 
-    public Single<List<GithubRepo>> searchGithubRepos(@Nullable final String query) {
-        return repository.searchGithubRepos(buildSearchRequestQuery(query))
+    public Single<List<GithubRepo>> searchGithubRepos(@Nullable final String query, @NonNull final GitReposFilterType filterType) {
+        return repository.searchGithubRepos(buildSearchRequestQuery(query, filterType))
                 .flatMapIterable(list -> list)
                 .map(mapper::mapToUI)
                 .toList();
     }
 
     @NonNull
-    private String buildSearchRequestQuery(@Nullable final String query) {
+    private String buildSearchRequestQuery(@Nullable final String query, @NonNull final GitReposFilterType filterType) {
         // TODO: Replace mocking code with impl once UI is ready
         final StringBuilder resultQueryBuilder = new StringBuilder();
-        final String filterDateQuery = "created:>2024-04-17";
+        final String filterDateQuery = filterDateConvertor.getDateRange(filterType);
 
         if (!TextUtils.isEmpty(query)) {
             resultQueryBuilder.append(query).append(PLUS_SYMBOL);

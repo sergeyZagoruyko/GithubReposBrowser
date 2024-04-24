@@ -17,6 +17,7 @@ import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
+import com.example.githubreposbrowser.listeners.onItemSelectedListener;
 
 public class ReposListFragment extends BaseFragment {
 
@@ -39,14 +40,6 @@ public class ReposListFragment extends BaseFragment {
         super.onAttach(context);
         getLifecycle().addObserver(viewModel);
         searchBarHolder = getSearchBarHolderImpl();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (searchBarHolder != null) {
-            searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
-        }
     }
 
     @Nullable
@@ -76,6 +69,9 @@ public class ReposListFragment extends BaseFragment {
         super.setupListeners();
         if (searchBarHolder != null) {
             searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
+            searchBarHolder.setOnFilterClickedListener(viewModel::onFilterItemSelected);
+            searchBarHolder.setOnFilterClickedListener((onItemSelectedListener<GitReposFilterType>) item ->
+                    viewModel.onFilterItemSelected(item));
         }
     }
 
@@ -98,6 +94,7 @@ public class ReposListFragment extends BaseFragment {
         super.onDestroyView();
         if (searchBarHolder != null) {
             searchBarHolder.setOnTextChangeListener(null);
+            searchBarHolder.setOnFilterClickedListener(null);
         }
         binding.rvGithubRepos.setAdapter(null);
     }

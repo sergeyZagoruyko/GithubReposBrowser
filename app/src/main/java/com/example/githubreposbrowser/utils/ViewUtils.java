@@ -2,7 +2,7 @@ package com.example.githubreposbrowser.utils;
 
 import androidx.appcompat.widget.SearchView;
 
-import com.example.githubreposbrowser.listeners.OnTextChange;
+import com.example.githubreposbrowser.listeners.OnTextChangedListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +15,7 @@ public class ViewUtils {
 
     private static final long SEARCH_INPUT_DEBOUNCE_MS = 250;
 
-    public static Disposable initAsyncTextChangeHandling(SearchView searchView, OnTextChange callback) {
+    public static Disposable initAsyncTextChangeHandling(SearchView searchView, OnTextChangedListener callback) {
         return Observable.create((ObservableOnSubscribe<String>) emitter -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {

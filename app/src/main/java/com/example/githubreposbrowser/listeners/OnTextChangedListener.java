@@ -1,5 +1,6 @@
 package com.example.githubreposbrowser.listeners;
 
-public interface OnTextChange {
+@FunctionalInterface
+public interface OnTextChangedListener {
     void onTextChanged(final String text);
 }

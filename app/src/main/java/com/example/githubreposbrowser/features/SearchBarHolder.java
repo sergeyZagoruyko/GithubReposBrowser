@@ -1,7 +1,10 @@
 package com.example.githubreposbrowser.features;
 
-import com.example.githubreposbrowser.listeners.OnTextChange;
+import com.example.githubreposbrowser.listeners.onItemSelectedListener;
+import com.example.githubreposbrowser.listeners.OnTextChangedListener;
 
 public interface SearchBarHolder {
-    void setOnTextChangeListener(final OnTextChange listener);
+    void setOnTextChangeListener(final OnTextChangedListener listener);
+
+    <T> void setOnFilterClickedListener(final onItemSelectedListener<T> listener);
 }

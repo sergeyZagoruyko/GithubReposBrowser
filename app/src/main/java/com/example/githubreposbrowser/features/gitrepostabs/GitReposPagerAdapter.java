@@ -37,14 +37,14 @@ public class GitReposPagerAdapter extends FragmentStateAdapter {
         FAVORITES(R.string.favorite_repos_tab_title);
 
         @StringRes
-        private final int tabNameRes;
+        private final int tabNameResId;
 
-        PageType(@StringRes int tabNameRes) {
-            this.tabNameRes = tabNameRes;
+        PageType(@StringRes final int tabNameResId) {
+            this.tabNameResId = tabNameResId;
         }
 
-        public int getTabNameRes() {
-            return tabNameRes;
+        public int getTabNameResId() {
+            return tabNameResId;
         }
 
         public Fragment getFragment() {

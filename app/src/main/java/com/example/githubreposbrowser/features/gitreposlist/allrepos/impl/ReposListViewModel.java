@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.githubreposbrowser.base.BaseViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubReposInteractor;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     @NonNull
     private final CompositeDisposable searchReposComposable = new CompositeDisposable();
 
+    @NonNull
+    private GitReposFilterType currentFilterType = GitReposFilterType.getDefaultValue();
+    @Nullable
+    private String searchQuery = null;
+
     @Inject
     public ReposListViewModel(@NonNull final GithubReposInteractor interactor) {
         this.interactor = interactor;
@@ -41,17 +47,23 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     @Override
     public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
         if (event == Lifecycle.Event.ON_CREATE) {
-            searchGitRepos(null);
+            searchGitRepos(null, currentFilterType);
         }
     }
 
     public void onSearchTextEntered(@Nullable final String text) {
-        searchGitRepos(text);
+        searchQuery = text;
+        searchGitRepos(text, currentFilterType);
     }
 
-    private void searchGitRepos(@Nullable final String searchQuery) {
+    public void onFilterItemSelected(final GitReposFilterType selectedFilterType) {
+        currentFilterType = selectedFilterType;
+        searchGitRepos(searchQuery, currentFilterType);
+    }
+
+    private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType) {
         searchReposComposable.clear();
-        searchReposComposable.add(interactor.searchGithubRepos(searchQuery)
+        searchReposComposable.add(interactor.searchGithubRepos(searchQuery, filterType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onReposReceived, this::onFailedReposReceive));

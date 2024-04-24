@@ -3,4 +3,8 @@
 
     <string name="all_repos_tab_title">All</string>
     <string name="favorite_repos_tab_title">Favorites</string>
+
+    <string name="git_repos_filter_type_last_day">Day</string>
+    <string name="git_repos_filter_type_last_week">Week</string>
+    <string name="git_repos_filter_type_last_month">Month</string>
 </resources>

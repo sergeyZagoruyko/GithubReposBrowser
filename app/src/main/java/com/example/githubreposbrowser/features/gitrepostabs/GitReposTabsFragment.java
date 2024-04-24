@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,9 @@ import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposTabsBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.SearchBarHolder;
-import com.example.githubreposbrowser.listeners.OnTextChange;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
+import com.example.githubreposbrowser.listeners.OnTextChangedListener;
+import com.example.githubreposbrowser.listeners.onItemSelectedListener;
 import com.example.githubreposbrowser.utils.ViewUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -30,10 +33,16 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     private GitReposPagerAdapter adapter;
 
     @Nullable
-    private OnTextChange onSearchTextChanged = null;
+    private OnTextChangedListener onSearchTextChanged = null;
+    @Nullable
+    private onItemSelectedListener onFilterClickedListener = null;
 
     @NonNull
     private final CompositeDisposable searchInputDisposable = new CompositeDisposable();
+
+    private PopupMenu filterPopupMenu;
+    @NonNull
+    private GitReposFilterType lastSelectedFilterType = GitReposFilterType.getDefaultValue();
 
     @Nullable
     @Override
@@ -41,10 +50,8 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
         super.onCreateView(inflater, container, savedInstanceState);
         binding = FragmentGitReposTabsBinding.inflate(inflater, container, false);
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(binding.toolbar);
-        setupSearchView();
+        initUI();
 
-        initTabs();
         return binding.getRoot();
     }
 
@@ -53,10 +60,31 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
 
     }
 
+    @Override
+    protected void setupListeners() {
+        super.setupListeners();
+        binding.ivFilter.setOnClickListener(v -> {
+            if (filterPopupMenu != null) {
+                filterPopupMenu.show();
+            }
+        });
+    }
 
     @Override
-    public void setOnTextChangeListener(OnTextChange listener) {
+    public void setOnTextChangeListener(OnTextChangedListener listener) {
         onSearchTextChanged = listener;
+    }
+
+    public <T> void setOnFilterClickedListener(@Nullable onItemSelectedListener<T> onFilterClickedListener) {
+        this.onFilterClickedListener = onFilterClickedListener;
+    }
+
+    private void initUI() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(binding.toolbar);
+
+        setupFilterPopupMenu();
+        setupSearchView();
+        initTabs();
     }
 
     private void initTabs() {
@@ -64,7 +92,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
         binding.vpGitRepos.setAdapter(adapter);
 
         new TabLayoutMediator(binding.tabLayout, binding.vpGitRepos, false, true,
-                (tab, position) -> tab.setText(adapter.getTabTypeByPos(position).getTabNameRes())).attach();
+                (tab, position) -> tab.setText(adapter.getTabTypeByPos(position).getTabNameResId())).attach();
     }
 
     private void setupSearchView() {
@@ -83,6 +111,19 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
         searchInputDisposable.add(ViewUtils.initAsyncTextChangeHandling(binding.searchView, this::onSearchTextEntered));
     }
 
+    private void setupFilterPopupMenu() {
+        filterPopupMenu = new PopupMenu(requireContext(), binding.ivFilter);
+        filterPopupMenu.getMenuInflater().inflate(R.menu.filter_type_popup_menu, filterPopupMenu.getMenu());
+        filterPopupMenu.setOnMenuItemClickListener(item -> {
+            lastSelectedFilterType = GitReposFilterType.getByItemId(item.getItemId());
+            if (onFilterClickedListener != null) {
+                onFilterClickedListener.onItemSelected(lastSelectedFilterType);
+            }
+            return true;
+        });
+
+    }
+
     private void onSearchTextEntered(final String text) {
         if (onSearchTextChanged != null) {
             onSearchTextChanged.onTextChanged(text);
@@ -92,8 +133,13 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (filterPopupMenu != null) {
+            filterPopupMenu.dismiss();
+            filterPopupMenu = null;
+        }
         searchInputDisposable.clear();
         onSearchTextChanged = null;
+        onFilterClickedListener = null;
         binding.vpGitRepos.setAdapter(null);
     }
 }
