@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser;
+package com.example.githubreposbrowser.base;
 
 import androidx.appcompat.app.AppCompatActivity;
 

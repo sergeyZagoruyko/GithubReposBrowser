@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">GithubReposBrowser</string>
+
+    <string name="all_repos_tab_title">All</string>
+    <string name="favorite_repos_tab_title">Favorites</string>
 </resources>
