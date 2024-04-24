@@ -1,5 +1,7 @@
 package com.example.githubreposbrowser.features.gitreposlist.allrepos.impl;
 
+import static com.example.githubreposbrowser.utils.Constants.API_ERROR_STATUS_CODE_AUTH_FAILED;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
@@ -8,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseViewModel;
 import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
@@ -17,6 +20,7 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitRepos
 import com.example.githubreposbrowser.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,6 +28,7 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 public class ReposListViewModel extends BaseViewModel implements LifecycleEventObserver {
 
@@ -117,6 +122,13 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     }
 
     private void onFailedReposReceive(final Throwable error) {
+        // In the case of token overusing skil paging and apply empty list instead of the next part
+        if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
+            onReposReceived(new GithubRepoListData(totalAvailableItemsCount, Collections.emptyList()));
+            errorToast.setValue(interactor.getString(R.string.error_invalid_token));
+            return;
+        }
+
         final String errorContent = error.getMessage() != null ? error.getMessage() : "";
         if (currentPage > DEF_CURRENT_PAGE) {
             errorToast.setValue(errorContent);

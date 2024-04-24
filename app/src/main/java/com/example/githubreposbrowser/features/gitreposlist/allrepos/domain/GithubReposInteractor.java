@@ -46,7 +46,8 @@ public class GithubReposInteractor extends BaseInteractor {
                             .map(mapper::mapToUI)
                             .collect(Collectors.toList());
                     return new GithubRepoListData(response.totalCount(), repos);
-                }).singleOrError();
+                })
+                .singleOrError();
     }
 
     @NonNull
