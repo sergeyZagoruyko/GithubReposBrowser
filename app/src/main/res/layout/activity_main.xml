@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvNetworkNotAvailableBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:paddingVertical="@dimen/base_margin"
+        android:text="@string/network_not_available"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/base_text_size" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frmGitReposTabs"
-        android:name="com.example.githubreposbrowser.features.gitrepostabs.GitReposTabsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</FrameLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

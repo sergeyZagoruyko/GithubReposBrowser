@@ -88,7 +88,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     }
 
     private void initTabs() {
-        adapter = new GitReposPagerAdapter(getParentFragmentManager(), getLifecycle());
+        adapter = new GitReposPagerAdapter(getChildFragmentManager(), getLifecycle());
         binding.vpGitRepos.setAdapter(adapter);
 
         new TabLayoutMediator(binding.tabLayout, binding.vpGitRepos, false, true,

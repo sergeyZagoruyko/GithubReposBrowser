@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -136,10 +135,8 @@ public class ReposListFragment extends BaseFragment {
 
     @Nullable
     private SearchBarHolder getSearchBarHolderImpl() {
-        for (Fragment frm : getParentFragmentManager().getFragments()) {
-            if (frm instanceof SearchBarHolder) {
-                return (SearchBarHolder) frm;
-            }
+        if (getParentFragment() != null && getParentFragment() instanceof SearchBarHolder) {
+            return (SearchBarHolder) getParentFragment();
         }
         return null;
     }
