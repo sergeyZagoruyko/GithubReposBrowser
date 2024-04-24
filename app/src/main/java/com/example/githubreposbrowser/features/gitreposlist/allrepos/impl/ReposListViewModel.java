@@ -1,6 +1,7 @@
 package com.example.githubreposbrowser.features.gitreposlist.allrepos.impl;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -40,12 +41,12 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     @Override
     public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
         if (event == Lifecycle.Event.ON_CREATE) {
-            onViewCreated();
+            searchGitRepos();
         }
     }
 
-    private void onViewCreated() {
-        searchGitRepos();
+    public void onSearchTextEntered(@Nullable final String text) {
+
     }
 
     private void searchGitRepos() {

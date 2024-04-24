@@ -8,20 +8,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
+import com.example.githubreposbrowser.features.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
-import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ReposListFragment extends BaseFragment {
 
@@ -30,6 +25,9 @@ public class ReposListFragment extends BaseFragment {
 
     @NonNull
     private final RepoListAdapter adapter = new RepoListAdapter();
+
+    @Nullable
+    private SearchBarHolder searchBarHolder = null;
 
     @NonNull
     public static ReposListFragment newInstance() {
@@ -40,6 +38,7 @@ public class ReposListFragment extends BaseFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         getLifecycle().addObserver(viewModel);
+        searchBarHolder = getSearchBarHolderImpl();
     }
 
     @Nullable
@@ -64,13 +63,34 @@ public class ReposListFragment extends BaseFragment {
         observeNonNull(viewModel.githubRepos, adapter::submitList);
     }
 
+    @Override
+    protected void setupListeners() {
+        super.setupListeners();
+        if (searchBarHolder != null) {
+            searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
+        }
+    }
+
     private void initUI() {
         binding.rvGithubRepos.setAdapter(adapter);
+    }
+
+    @Nullable
+    private SearchBarHolder getSearchBarHolderImpl() {
+        for (Fragment frm : getParentFragmentManager().getFragments()) {
+            if (frm instanceof SearchBarHolder) {
+                return (SearchBarHolder) frm;
+            }
+        }
+        return null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (searchBarHolder != null) {
+            searchBarHolder.setOnTextChangeListener(null);
+        }
         binding.rvGithubRepos.setAdapter(null);
     }
 }

@@ -24,11 +24,16 @@ abstract public class BaseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObservers();
+        setupListeners();
     }
 
     public abstract void setupDI(AppComponent appComponent);
 
     protected void setupObservers() {
+
+    }
+
+    protected void setupListeners() {
 
     }
 
