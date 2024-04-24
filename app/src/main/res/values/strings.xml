@@ -7,4 +7,6 @@
     <string name="git_repos_filter_type_last_day">Day</string>
     <string name="git_repos_filter_type_last_week">Week</string>
     <string name="git_repos_filter_type_last_month">Month</string>
+
+    <string name="error_data_loading_schema">Failed to load data: %s</string>
 </resources>

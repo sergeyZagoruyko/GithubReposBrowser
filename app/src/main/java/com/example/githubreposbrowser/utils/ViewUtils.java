@@ -1,5 +1,8 @@
 package com.example.githubreposbrowser.utils;
 
+import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 
 import com.example.githubreposbrowser.listeners.OnTextChangedListener;
@@ -36,5 +39,9 @@ public class ViewUtils {
                 .debounce(SEARCH_INPUT_DEBOUNCE_MS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callback::onTextChanged);
+    }
+
+    public static void setVisibleOrGone(@NonNull final View view, final boolean visibleOrGone) {
+        view.setVisibility(visibleOrGone ? View.VISIBLE : View.GONE);
     }
 }

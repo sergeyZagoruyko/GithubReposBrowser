@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.githubreposbrowser.base.BaseViewModel;
+import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubReposInteractor;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
@@ -24,9 +25,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class ReposListViewModel extends BaseViewModel implements LifecycleEventObserver {
 
     @NonNull
-    private final MutableLiveData<List<GithubRepo>> _githubRepos = new MutableLiveData<>();
+    private final MutableLiveData<ScreenState> _screenState = new MutableLiveData<>();
     @NonNull
-    public final LiveData<List<GithubRepo>> githubRepos = _githubRepos;
+    public final LiveData<ScreenState> screenState = _screenState;
 
     @NonNull
     private final GithubReposInteractor interactor;
@@ -47,21 +48,26 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     @Override
     public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
         if (event == Lifecycle.Event.ON_CREATE) {
-            searchGitRepos(null, currentFilterType);
+            searchGitRepos(null, currentFilterType, false);
         }
+    }
+
+    public void onRefreshRepos() {
+        searchGitRepos(searchQuery, currentFilterType, true);
     }
 
     public void onSearchTextEntered(@Nullable final String text) {
         searchQuery = text;
-        searchGitRepos(text, currentFilterType);
+        searchGitRepos(text, currentFilterType, false);
     }
 
     public void onFilterItemSelected(final GitReposFilterType selectedFilterType) {
         currentFilterType = selectedFilterType;
-        searchGitRepos(searchQuery, currentFilterType);
+        searchGitRepos(searchQuery, currentFilterType, false);
     }
 
-    private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType) {
+    private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType, final boolean refreshing) {
+        _screenState.setValue(ScreenState.loading(true, refreshing));
         searchReposComposable.clear();
         searchReposComposable.add(interactor.searchGithubRepos(searchQuery, filterType)
                 .subscribeOn(Schedulers.io())
@@ -70,11 +76,12 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     }
 
     private void onReposReceived(List<GithubRepo> list) {
-        _githubRepos.setValue(list);
+        _screenState.setValue(ScreenState.success(list));
     }
 
     private void onFailedReposReceive(final Throwable error) {
-
+        final String errorContent = error.getMessage() != null ? error.getMessage() : "";
+        _screenState.setValue(ScreenState.error(errorContent));
     }
 
     @Override
