@@ -40,4 +40,10 @@ public class GitReposTabsFragment extends BaseFragment {
         new TabLayoutMediator(binding.tabLayout, binding.vpGitRepos, false, true,
                 (tab, position) -> tab.setText(adapter.getTabTypeByPos(position).getTabNameRes())).attach();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding.vpGitRepos.setAdapter(null);
+    }
 }

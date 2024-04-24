@@ -10,7 +10,7 @@ public class GithubRepoMapper {
     public GithubRepoMapper() {
     }
 
-    public GithubRepo mapFromResponse(GithubRepoResponse responseItem) {
+    public GithubRepo mapToUI(GithubRepoResponse responseItem) {
         return new GithubRepo(
                 responseItem.id(),
                 responseItem.getOwnerLogin(),

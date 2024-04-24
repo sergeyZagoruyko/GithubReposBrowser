@@ -28,7 +28,7 @@ public class GithubReposInteractor extends BaseInteractor {
     public Single<List<GithubRepo>> searchGithubRepos() {
         return repository.searchGithubRepos()
                 .flatMapIterable(list -> list)
-                .map(mapper::mapFromResponse)
+                .map(mapper::mapToUI)
                 .toList();
     }
 }

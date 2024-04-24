@@ -37,7 +37,7 @@ public class FavoriteReposListFragment extends BaseFragment {
     }
 
     private void initUI() {
-        binding.tvText.setText(getString(R.string.favorite_repos_tab_title));
+
     }
 }
 

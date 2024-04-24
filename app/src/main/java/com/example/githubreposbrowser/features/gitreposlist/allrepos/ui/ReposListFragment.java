@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.githubreposbrowser.R;
@@ -15,12 +16,20 @@ import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ReposListFragment extends BaseFragment {
 
     private FragmentGitReposListBinding binding;
     private ReposListViewModel viewModel;
+
+    @NonNull
+    private final RepoListAdapter adapter = new RepoListAdapter();
 
     @NonNull
     public static ReposListFragment newInstance() {
@@ -49,7 +58,19 @@ public class ReposListFragment extends BaseFragment {
         viewModel = new ViewModelProvider(this, component.vm()).get(ReposListViewModel.class);
     }
 
+    @Override
+    protected void setupObservers() {
+        super.setupObservers();
+        observeNonNull(viewModel.githubRepos, adapter::submitList);
+    }
+
     private void initUI() {
-        binding.tvText.setText(getString(R.string.all_repos_tab_title));
+        binding.rvGithubRepos.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding.rvGithubRepos.setAdapter(null);
     }
 }
