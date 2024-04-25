@@ -127,7 +127,7 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
 
     private void onFailedReposReceive(final Throwable error, final boolean refreshing) {
         // In the case of token overusing skip the paging and apply empty list instead of the next part
-        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
+        String errorContent = parseApiError(error);
         if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
             if (!githubRepos.isEmpty() || (!refreshing && currentPage > DEF_CURRENT_PAGE)) {
                 _screenState.setValue(ScreenState.success(githubRepos));

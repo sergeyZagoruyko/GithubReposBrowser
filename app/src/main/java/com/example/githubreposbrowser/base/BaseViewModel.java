@@ -21,4 +21,8 @@ abstract public class BaseViewModel extends ViewModel {
     protected String getBaseErrorDataLoadingText() {
         return baseInteractor.getString(R.string.base_error_data_loading_text);
     }
+
+    protected String parseApiError(@NonNull final Throwable error) {
+        return baseInteractor.parseApiError(error, getBaseErrorDataLoadingText());
+    }
 }
