@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features.gitreposlist.details.data;
+package com.example.githubreposbrowser.features.gitreposlist.details.domain;
 
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.data.OwnerResponse;
 import com.google.gson.annotations.SerializedName;

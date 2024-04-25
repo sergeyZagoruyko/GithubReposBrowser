@@ -36,7 +36,7 @@ public class GithubRepoDetailViewModel extends BaseViewModel {
 
     public void onViewCreated(final long githubRepoId) {
         if (githubRepoId <= 0) {
-            _screenState.setValue(ScreenState.error(getBasicErrorText()));
+            _screenState.setValue(ScreenState.error(getBaseErrorDataLoadingText()));
             return;
         }
 
@@ -53,7 +53,7 @@ public class GithubRepoDetailViewModel extends BaseViewModel {
     }
 
     private void onFailedDetailsReceive(final Throwable error) {
-        final String errorContent = error.getMessage() != null ? error.getMessage() : getBasicErrorText();
+        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
         _screenState.setValue(ScreenState.error(errorContent));
     }
 

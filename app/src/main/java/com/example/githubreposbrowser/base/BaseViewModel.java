@@ -14,7 +14,11 @@ abstract public class BaseViewModel extends ViewModel {
         this.baseInteractor = baseInteractor;
     }
 
-    protected String getBasicErrorText() {
+    protected String getBaseErrorText() {
         return baseInteractor.getString(R.string.base_error_text);
+    }
+
+    protected String getBaseErrorDataLoadingText() {
+        return baseInteractor.getString(R.string.base_error_data_loading_text);
     }
 }

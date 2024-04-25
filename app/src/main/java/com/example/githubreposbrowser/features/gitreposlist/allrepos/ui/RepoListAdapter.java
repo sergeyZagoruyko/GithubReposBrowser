@@ -78,5 +78,4 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHo
             binding.getRoot().setOnClickListener(v -> onItemSelectedListener.onItemSelected(item));
         }
     }
-
 }

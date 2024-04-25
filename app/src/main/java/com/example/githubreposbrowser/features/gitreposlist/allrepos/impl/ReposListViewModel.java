@@ -7,8 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.data.ScreenState;
@@ -17,7 +15,6 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.Gith
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepoListData;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubReposInteractor;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
-import com.example.githubreposbrowser.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,10 +32,8 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
     private static final int DEF_CURRENT_PAGE = 1;
 
     @NonNull
-    public final SingleLiveEvent<String> errorToast = new SingleLiveEvent();
-
-    @NonNull
     private final GithubReposInteractor interactor;
+
     @NonNull
     private final CompositeDisposable searchReposComposable = new CompositeDisposable();
 
@@ -50,9 +45,8 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
     private int totalAvailableItemsCount;
 
     @NonNull
-    private List<GithubRepo> githubRepos = new ArrayList<>();
-    @NonNull
     private final GithubRepo loaderItem = GithubRepo.newInstanceLoader();
+    private List<Long> favoriteIds = new ArrayList<>();
 
     @Inject
     public ReposListViewModel(@NonNull final GithubReposInteractor interactor) {
@@ -67,6 +61,12 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
         }
     }
 
+    @Override
+    protected boolean isItemFavorite(long id) {
+        return favoriteIds.contains(id);
+    }
+
+    @Override
     public void onRefreshRepos() {
         currentPage = DEF_CURRENT_PAGE;
         searchGitRepos(searchQuery, currentFilterType, true);
@@ -92,6 +92,10 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
         searchGitRepos(searchQuery, currentFilterType, false);
     }
 
+    public void onFavoriteIdsChanged(@NonNull final List<Long> favoriteIds) {
+        this.favoriteIds = favoriteIds;
+    }
+
     private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType,
                                 final boolean refreshing) {
         if (currentPage <= DEF_CURRENT_PAGE) {
@@ -108,9 +112,14 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
         totalAvailableItemsCount = listData.totalCount();
         setLoaderItemVisibility(false);
 
-        final List<GithubRepo> updatedList = new ArrayList<>(githubRepos);
-        updatedList.addAll(listData.items());
-        githubRepos = updatedList;
+
+        if (currentPage > DEF_CURRENT_PAGE) {
+            final List<GithubRepo> updatedList = new ArrayList<>(githubRepos);
+            updatedList.addAll(listData.items());
+            githubRepos = updatedList;
+        } else {
+            githubRepos = listData.items();
+        }
 
         if (!githubRepos.isEmpty()) {
             _screenState.setValue(ScreenState.success(githubRepos));
@@ -127,7 +136,7 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
             return;
         }
 
-        final String errorContent = error.getMessage() != null ? error.getMessage() : getBasicErrorText();
+        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
         if (currentPage > DEF_CURRENT_PAGE) {
             errorToast.setValue(errorContent);
             return;

@@ -17,7 +17,8 @@
     </plurals>
     <string name="details_prog_lang_prefix">Written with %s</string>
 
-    <string name="base_error_text">Failed to load data</string>
+    <string name="base_error_text">An error has occurred. Try again later</string>
+    <string name="base_error_data_loading_text">Failed to load data</string>
     <string name="error_data_loading">Failed to load data: %s</string>
     <string name="error_invalid_token">API requests limit reached. Please try again after some time.</string>
     <string name="network_not_available">Seems like Network is not available.</string>

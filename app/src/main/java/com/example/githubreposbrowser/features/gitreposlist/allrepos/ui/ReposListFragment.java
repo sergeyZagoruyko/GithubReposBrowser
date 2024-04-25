@@ -50,6 +50,15 @@ public class ReposListFragment extends BaseRepoListFragment {
     protected void setupObservers() {
         super.setupObservers();
         observeNonNull(viewModel.errorToast, text -> Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show());
+        observeNonNull(sharedFavoritesViewModel.favoriteIds, ids -> viewModel.onFavoriteIdsChanged(ids));
+    }
+
+    @Override
+    protected void initUI() {
+        super.initUI();
+        if (searchBarHolder != null) {
+            searchBarHolder.setSearchItemsVisibility(true);
+        }
     }
 
     @Override
@@ -61,19 +70,10 @@ public class ReposListFragment extends BaseRepoListFragment {
             searchBarHolder.setOnFilterClickedListener((OnItemSelectedListener<GitReposFilterType>) item ->
                     viewModel.onFilterItemSelected(item));
         }
-        binding.swipeRefreshRepos.setOnRefreshListener(() -> viewModel.onRefreshRepos());
         if (binding.rvGithubRepos.getLayoutManager() != null) {
             binding.rvGithubRepos.setOnScrollChangeListener(
                     new PagingScrollChangeListener((LinearLayoutManager) binding.rvGithubRepos.getLayoutManager(),
                             () -> viewModel.onScrolledToNext()));
-        }
-    }
-
-    @Override
-    protected void initUI() {
-        super.initUI();
-        if (searchBarHolder != null) {
-            searchBarHolder.setSearchItemsVisibility(true);
         }
     }
 

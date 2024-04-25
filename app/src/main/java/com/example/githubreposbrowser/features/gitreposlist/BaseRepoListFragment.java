@@ -4,6 +4,7 @@ import static com.example.githubreposbrowser.utils.ViewUtils.setVisibleOrGone;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +56,11 @@ abstract public class BaseRepoListFragment extends BaseFragment {
     protected void setupObservers() {
         super.setupObservers();
         observeNonNull(getViewModel().screenState, this::onScreenStateChanged);
-        observeNonNull(getViewModel().showRepoDetailsDialog, this::showRepoDetailsDialog);
+        observeNonNull(getViewModel().showRepoDetailsDialog, detailsDialogData -> showRepoDetailsDialog(detailsDialogData.repoId(), detailsDialogData.favorite()));
     }
 
-    protected void showRepoDetailsDialog(@NonNull final Long id) {
-        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(id);
+    protected void showRepoDetailsDialog(@NonNull final Long id, final boolean favorite) {
+        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(id, favorite);
         dialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
     }
 
@@ -74,6 +75,12 @@ abstract public class BaseRepoListFragment extends BaseFragment {
     protected void initUI() {
         binding.rvGithubRepos.setAdapter(adapter);
         binding.rvGithubRepos.setItemAnimator(null);
+    }
+
+    @Override
+    protected void setupListeners() {
+        super.setupListeners();
+        binding.swipeRefreshRepos.setOnRefreshListener(() -> getViewModel().onRefreshRepos());
     }
 
     private void onScreenStateChanged(@NonNull final ScreenState state) {

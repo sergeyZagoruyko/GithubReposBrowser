@@ -23,21 +23,26 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.Gith
 import com.example.githubreposbrowser.features.gitreposlist.details.di.GithubRepoDetailsDialogComponent;
 import com.example.githubreposbrowser.features.gitreposlist.details.domain.GithubRepoDetails;
 import com.example.githubreposbrowser.features.gitreposlist.details.impl.GithubRepoDetailViewModel;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
 
 public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
 
     private static final String ARG_GITHUB_REPO_ID = "ARG_GITHUB_REPO_ID";
+    private static final String ARG_IS_FAVORITE = "ARG_IS_FAVORITE";
 
     private BottomDialogGithubRepoDetailsBinding binding;
     private GithubRepoDetailViewModel viewModel;
+    private FavoriteReposViewModel sharedFavoritesViewModel;
 
     private long githubRepoId;
+    private boolean favorite;
 
     @NonNull
-    public static GithubRepoDetailsDialog newInstance(final long githubRepoId) {
+    public static GithubRepoDetailsDialog newInstance(final long githubRepoId, final boolean favorite) {
         final GithubRepoDetailsDialog fragment = new GithubRepoDetailsDialog();
         final Bundle args = new Bundle();
         args.putLong(ARG_GITHUB_REPO_ID, githubRepoId);
+        args.putBoolean(ARG_IS_FAVORITE, favorite);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +54,7 @@ public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
         binding = BottomDialogGithubRepoDetailsBinding.inflate(inflater, null, false);
         if (getArguments() != null) {
             githubRepoId = getArguments().getLong(ARG_GITHUB_REPO_ID, 0);
+            favorite = getArguments().getBoolean(ARG_IS_FAVORITE);
         }
         return binding.getRoot();
     }
@@ -65,12 +71,14 @@ public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
         GithubRepoDetailsDialogComponent component = appComponent.plusRepoDetailsDialog().create();
         component.inject(this);
         viewModel = new ViewModelProvider(this, component.vm()).get(GithubRepoDetailViewModel.class);
+        sharedFavoritesViewModel = new ViewModelProvider(requireActivity(), component.favoritesSharedVM()).get(FavoriteReposViewModel.class);
     }
 
     @Override
     protected void setupObservers() {
         super.setupObservers();
         observeNonNull(viewModel.screenState, this::onScreenStateChanged);
+        observeNonNull(sharedFavoritesViewModel.favoriteStateChanged, detailsDialogData -> setFavoriteState(detailsDialogData.favorite()));
     }
 
     private void onScreenStateChanged(@NonNull final ScreenState state) {
@@ -97,7 +105,6 @@ public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
 
     private void setLoadingState(final boolean loading) {
         setVisibleOrGone(binding.pbDetails, loading);
-
     }
 
     private void setEmptyState() {
@@ -126,7 +133,14 @@ public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
         setVisibleOrGone(binding.tvProgLang, progLangStrExists);
         if (progLangStrExists) {
             binding.tvProgLang.setText(getString(R.string.details_prog_lang_prefix, details.progLang()));
-
         }
+
+        setFavoriteState(favorite);
+        binding.ivFavorite.setOnClickListener(v -> sharedFavoritesViewModel.onFavoriteClicked(details, favorite));
+    }
+
+    private void setFavoriteState(final boolean favorite) {
+        this.favorite = favorite;
+        binding.ivFavorite.setImageResource(favorite ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
     }
 }

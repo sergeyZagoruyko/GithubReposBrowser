@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.githubreposbrowser.api.ApiClient;
 import com.example.githubreposbrowser.base.BaseRepository;
-import com.example.githubreposbrowser.features.gitreposlist.details.data.GithubRepoDetailsResponse;
+import com.example.githubreposbrowser.features.gitreposlist.details.domain.GithubRepoDetailsResponse;
 
 import javax.inject.Inject;
 

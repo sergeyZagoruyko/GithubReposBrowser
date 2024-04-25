@@ -1,7 +1,7 @@
 package com.example.githubreposbrowser.api;
 
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.data.GithubRepoListResponse;
-import com.example.githubreposbrowser.features.gitreposlist.details.data.GithubRepoDetailsResponse;
+import com.example.githubreposbrowser.features.gitreposlist.details.domain.GithubRepoDetailsResponse;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;

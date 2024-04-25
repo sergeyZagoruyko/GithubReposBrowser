@@ -1,5 +1,7 @@
 package com.example.githubreposbrowser.features.gitreposlist.favorites;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,6 +12,16 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoVie
 public class FavoriteReposFragment extends BaseRepoListFragment {
 
     private FavoriteReposViewModel viewModel;
+
+    public static FavoriteReposFragment newInstance() {
+        return new FavoriteReposFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        getLifecycle().addObserver(viewModel);
+    }
 
     @Override
     public void setupDI(AppComponent appComponent) {
