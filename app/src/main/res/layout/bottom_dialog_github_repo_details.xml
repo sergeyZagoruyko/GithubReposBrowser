@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/base_margin">
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/base_margin"
+        android:layout_marginTop="@dimen/base_margin"
+        android:text="@string/repo_details_dialog_title"
+        android:textSize="@dimen/base_title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_margin"
+        android:src="@drawable/ic_favorite_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvDialogTitle" />
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="@dimen/x_big_ic_size"
+        android:layout_height="@dimen/x_big_ic_size"
+        android:layout_marginStart="@dimen/base_margin"
+        android:layout_marginTop="@dimen/big_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDialogTitle"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/ivStar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star"
+        app:layout_constraintBottom_toBottomOf="@id/tvStarsCount"
+        app:layout_constraintEnd_toStartOf="@id/tvStarsCount"
+        app:layout_constraintTop_toTopOf="@id/tvStarsCount" />
+
+    <TextView
+        android:id="@+id/tvStarsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_margin"
+        android:layout_marginEnd="@dimen/base_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        tools:text="14" />
+
+    <TextView
+        android:id="@+id/tvOwnerLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_margin"
+        android:layout_marginTop="@dimen/base_margin"
+        android:textSize="@dimen/base_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+        tools:text="SANGAVI146" />
+
+    <TextView
+        android:id="@+id/tvRepoName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x_small_margin"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/tvOwnerLogin"
+        app:layout_constraintStart_toStartOf="@id/tvOwnerLogin"
+        app:layout_constraintTop_toBottomOf="@id/tvOwnerLogin"
+        tools:text="orz-li-gpu" />
+
+    <TextView
+        android:id="@+id/tvRepoUrl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/base_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:autoLink="web"
+        android:clickable="true"
+        android:textColorLink="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRepoName"
+        tools:text="https://github.com/" />
+
+    <TextView
+        android:id="@+id/tvRepoDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/base_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRepoUrl"
+        tools:text="Bitcoin, Solana, Ethereum, and other private key brute force tool, written in Python. Also can be used as bitcoin wallet and convertor." />
+
+    <TextView
+        android:id="@+id/tvForksCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintStart_toStartOf="@id/tvRepoDesc"
+        app:layout_constraintTop_toBottomOf="@id/tvRepoDesc"
+        tools:text="46 Forks" />
+
+    <TextView
+        android:id="@+id/tvCreationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintEnd_toEndOf="@id/tvRepoDesc"
+        app:layout_constraintTop_toBottomOf="@id/tvRepoDesc"
+        tools:text="2024-04-22" />
+
+    <TextView
+        android:id="@+id/tvProgLang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintEnd_toEndOf="@id/tvCreationDate"
+        app:layout_constraintStart_toStartOf="@id/tvForksCount"
+        app:layout_constraintTop_toBottomOf="@id/tvForksCount"
+        tools:text="Written on Python" />
+
+    <ProgressBar
+        android:id="@+id/pbDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

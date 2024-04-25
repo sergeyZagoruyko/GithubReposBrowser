@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">GithubReposBrowser</string>
+
+    <string name="all_repos_tab_title">All</string>
+    <string name="favorite_repos_tab_title">Favorites</string>
+
+    <string name="git_repos_filter_type_last_day">Day</string>
+    <string name="git_repos_filter_type_last_week">Week</string>
+    <string name="git_repos_filter_type_last_month">Month</string>
+
+    <string name="repo_description_default_mock">Text description with all the major repository information</string>
+
+    <string name="repo_details_dialog_title">Repository details</string>
+    <plurals name="details_forks_count">
+        <item quantity="one">%s fork</item>
+        <item quantity="other">%s forks</item>
+    </plurals>
+    <string name="details_prog_lang_prefix">Written with %s</string>
+
+    <string name="base_error_text">An error has occurred. Try again later</string>
+    <string name="base_error_data_loading_text">Failed to load data</string>
+    <string name="error_data_loading">Failed to load data: %s</string>
+    <string name="error_invalid_token">API requests limit reached. Please try again after some time.</string>
+    <string name="network_not_available">Seems like Network is not available.</string>
+    <string name="empty_screen_state_text">Current list is empty.</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tiny_margin">2dp</dimen>
+    <dimen name="x_small_margin">4dp</dimen>
+    <dimen name="small_margin">6dp</dimen>
+    <dimen name="base_margin">8dp</dimen>
+    <dimen name="medium_margin">12dp</dimen>
+    <dimen name="x_medium_margin">16dp</dimen>
+    <dimen name="xx_medium_margin">24dp</dimen>
+    <dimen name="big_margin">32dp</dimen>
+    <dimen name="x_big_margin">48dp</dimen>
+
+    <dimen name="shadow_size">1.5dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="horizontal_line_height">1dp</dimen>
+
+    <dimen name="base_ic_size">24dp</dimen>
+    <dimen name="medium_ic_size">48dp</dimen>
+    <dimen name="big_ic_size">64dp</dimen>
+    <dimen name="x_big_ic_size">82dp</dimen>
+
+    <dimen name="item_loader_height">48dp</dimen>
+</resources>

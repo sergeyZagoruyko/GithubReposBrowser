@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/actionTypeDay"
+        android:title="@string/git_repos_filter_type_last_day" />
+    <item
+        android:id="@+id/actionTypeWeek"
+        android:title="@string/git_repos_filter_type_last_week" />
+    <item
+        android:id="@+id/actionTypeMonth"
+        android:title="@string/git_repos_filter_type_last_month" />
+</menu>
