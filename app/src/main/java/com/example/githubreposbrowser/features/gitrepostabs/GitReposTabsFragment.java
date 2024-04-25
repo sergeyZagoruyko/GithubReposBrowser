@@ -4,6 +4,7 @@ import static com.example.githubreposbrowser.utils.ViewUtils.setVisibleOrGone;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     }
 
     public <T> void setOnFilterClickedListener(@Nullable OnItemSelectedListener<T> onFilterClickedListener) {
+        Log.e("mLog", "set listener " + onFilterClickedListener);
         this.onFilterClickedListener = onFilterClickedListener;
     }
 

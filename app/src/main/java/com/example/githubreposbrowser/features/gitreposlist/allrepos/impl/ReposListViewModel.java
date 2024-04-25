@@ -76,6 +76,7 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
     }
 
     public void onFilterItemSelected(final GitReposFilterType selectedFilterType) {
+        currentPage = DEF_CURRENT_PAGE;
         currentFilterType = selectedFilterType;
         searchGitRepos(searchQuery, currentFilterType, false);
     }

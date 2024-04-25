@@ -67,8 +67,6 @@ public class ReposListFragment extends BaseRepoListFragment {
         if (searchBarHolder != null) {
             searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
             searchBarHolder.setOnFilterClickedListener(viewModel::onFilterItemSelected);
-            searchBarHolder.setOnFilterClickedListener((OnItemSelectedListener<GitReposFilterType>) item ->
-                    viewModel.onFilterItemSelected(item));
         }
         if (binding.rvGithubRepos.getLayoutManager() != null) {
             binding.rvGithubRepos.setOnScrollChangeListener(
