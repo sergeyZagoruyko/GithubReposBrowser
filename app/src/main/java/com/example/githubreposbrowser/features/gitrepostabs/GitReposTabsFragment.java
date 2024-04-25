@@ -4,7 +4,6 @@ import static com.example.githubreposbrowser.utils.ViewUtils.setVisibleOrGone;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +20,11 @@ import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposTabsBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
-import com.example.githubreposbrowser.view.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.listeners.OnTextChangedListener;
 import com.example.githubreposbrowser.utils.ViewUtils;
+import com.example.githubreposbrowser.view.SearchBarHolder;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -40,19 +39,19 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     @Nullable
     private OnItemSelectedListener onFilterClickedListener = null;
 
-    @NonNull
-    private final CompositeDisposable searchInputDisposable = new CompositeDisposable();
-
+    @Nullable
     private PopupMenu filterPopupMenu;
     @NonNull
     private GitReposFilterType lastSelectedFilterType = GitReposFilterType.getDefaultValue();
+
+    @NonNull
+    private final CompositeDisposable searchInputDisposable = new CompositeDisposable();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         binding = FragmentGitReposTabsBinding.inflate(inflater, container, false);
-
         initUI();
 
         return binding.getRoot();
@@ -78,7 +77,6 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     }
 
     public <T> void setOnFilterClickedListener(@Nullable OnItemSelectedListener<T> onFilterClickedListener) {
-        Log.e("mLog", "set listener " + onFilterClickedListener);
         this.onFilterClickedListener = onFilterClickedListener;
     }
 
@@ -89,7 +87,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     }
 
     private void initUI() {
-        ((AppCompatActivity) getActivity()).setSupportActionBar(binding.toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.toolbar);
 
         setupFilterPopupMenu();
         setupSearchView();

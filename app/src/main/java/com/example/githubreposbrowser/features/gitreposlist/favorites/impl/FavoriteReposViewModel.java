@@ -55,11 +55,6 @@ public class FavoriteReposViewModel extends BaseRepoViewModel implements Lifecyc
     }
 
     @Override
-    protected boolean isItemFavorite(long id) {
-        return true;
-    }
-
-    @Override
     public void onRefreshRepos() {
         super.onRefreshRepos();
         fetchFavoritesRepos(true);
@@ -73,6 +68,12 @@ public class FavoriteReposViewModel extends BaseRepoViewModel implements Lifecyc
         }
     }
 
+    @Override
+    protected boolean isItemFavorite(long id) {
+        // Always true, since this is Favorites tab
+        return true;
+    }
+
     private void fetchFavoritesRepos(final boolean refreshing) {
         _screenState.setValue(ScreenState.loading(true, refreshing));
         searchReposComposable.clear();
@@ -80,48 +81,6 @@ public class FavoriteReposViewModel extends BaseRepoViewModel implements Lifecyc
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onReposReceived, this::onFailedReposReceive));
-    }
-
-    private void addToFavorites(@NonNull final GithubRepo item) {
-        searchReposComposable.add(interactor.addToFavorites(item)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((favoriteId) -> onAddedToFavorites(item), throwable -> errorToast.setValue(getBaseErrorText())));
-    }
-
-    private void onAddedToFavorites(@NonNull final GithubRepo item) {
-        final ArrayList<GithubRepo> updatedList = new ArrayList<>();
-        updatedList.add(item);
-        updatedList.addAll(githubRepos);
-        githubRepos = updatedList;
-        favoriteStateChanged.setValue(new DetailsDialogData(item.id(), true));
-        _screenState.setValue(ScreenState.success(githubRepos));
-
-        final List<Long> updatedFavoriteIds = _favoriteIds.getValue() == null
-                ? new ArrayList<>() : new ArrayList<>(_favoriteIds.getValue());
-        updatedFavoriteIds.add(item.id());
-        _favoriteIds.setValue(updatedFavoriteIds);
-    }
-
-    private void deleteFromFavorites(final long repoId) {
-        searchReposComposable.add(interactor.deleteFromFavorites(repoId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    onDeletedFromFavorites(repoId);
-                }, throwable -> errorToast.setValue(getBaseErrorText())));
-    }
-
-    private void onDeletedFromFavorites(final long repoId) {
-        favoriteStateChanged.setValue(new DetailsDialogData(repoId, false));
-        _screenState.setValue(ScreenState.success(new ArrayList<>(githubRepos
-                .stream().filter(githubRepo -> githubRepo.id() != repoId).collect(Collectors.toList()))));
-
-        final List<Long> updatedFavoriteIds = _favoriteIds.getValue() == null
-                ? new ArrayList<>() : new ArrayList<>(_favoriteIds.getValue());
-        _favoriteIds.setValue(updatedFavoriteIds.stream()
-                .filter(aLong -> aLong != repoId).collect(Collectors.toList()));
-
     }
 
     private void onReposReceived(@NonNull final List<GithubRepo> list) {
@@ -138,6 +97,48 @@ public class FavoriteReposViewModel extends BaseRepoViewModel implements Lifecyc
     private void onFailedReposReceive(final Throwable error) {
         final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
         _screenState.setValue(ScreenState.error(errorContent));
+    }
+
+    private void addToFavorites(@NonNull final GithubRepo item) {
+        searchReposComposable.add(interactor.addToFavorites(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((favoriteId) -> onAddedToFavorites(item),
+                        throwable -> errorToast.setValue(getBaseErrorText())));
+    }
+
+    private void onAddedToFavorites(@NonNull final GithubRepo item) {
+        final List<GithubRepo> updatedList = new ArrayList<>();
+        updatedList.add(item);
+        updatedList.addAll(githubRepos);
+        githubRepos = updatedList;
+        favoriteStateChanged.setValue(new DetailsDialogData(item.id(), true));
+        _screenState.setValue(ScreenState.success(githubRepos));
+
+        final List<Long> updatedFavoriteIds = _favoriteIds.getValue() == null
+                ? new ArrayList<>() : new ArrayList<>(_favoriteIds.getValue());
+        updatedFavoriteIds.add(item.id());
+        _favoriteIds.setValue(updatedFavoriteIds);
+    }
+
+    private void deleteFromFavorites(final long repoId) {
+        searchReposComposable.add(interactor.deleteFromFavorites(repoId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> onDeletedFromFavorites(repoId),
+                        throwable -> errorToast.setValue(getBaseErrorText())));
+    }
+
+    private void onDeletedFromFavorites(final long repoId) {
+        favoriteStateChanged.setValue(new DetailsDialogData(repoId, false));
+        _screenState.setValue(ScreenState.success(new ArrayList<>(githubRepos
+                .stream().filter(githubRepo -> githubRepo.id() != repoId).collect(Collectors.toList()))));
+
+        final List<Long> updatedFavoriteIds = _favoriteIds.getValue() == null
+                ? new ArrayList<>() : new ArrayList<>(_favoriteIds.getValue());
+        _favoriteIds.setValue(updatedFavoriteIds.stream()
+                .filter(id -> id != repoId).collect(Collectors.toList()));
+
     }
 
     @Override

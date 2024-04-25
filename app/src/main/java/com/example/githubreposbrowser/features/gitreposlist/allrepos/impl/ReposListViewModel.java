@@ -60,11 +60,6 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
     }
 
     @Override
-    protected boolean isItemFavorite(long id) {
-        return favoriteIds.contains(id);
-    }
-
-    @Override
     public void onRefreshRepos() {
         currentPage = DEF_CURRENT_PAGE;
         searchGitRepos(searchQuery, currentFilterType, true);
@@ -93,6 +88,11 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
 
     public void onFavoriteIdsChanged(@NonNull final List<Long> favoriteIds) {
         this.favoriteIds = favoriteIds;
+    }
+
+    @Override
+    protected boolean isItemFavorite(long id) {
+        return favoriteIds.contains(id);
     }
 
     private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType,
@@ -127,8 +127,8 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
     }
 
     private void onFailedReposReceive(final Throwable error, final boolean refreshing) {
-        // In the case of token overusing skip the paging and apply empty list instead of the next part
-        String errorContent = parseApiError(error);
+        final String errorContent = parseApiError(error);
+        // In the case of token overusing skip the paging and apply current instead
         if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
             if (!githubRepos.isEmpty() || (!refreshing && currentPage > DEF_CURRENT_PAGE)) {
                 _screenState.setValue(ScreenState.success(githubRepos));

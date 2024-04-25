@@ -15,11 +15,12 @@ import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
-import com.example.githubreposbrowser.view.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.RepoListAdapter;
+import com.example.githubreposbrowser.features.gitreposlist.details.ui.DetailsDialogData;
 import com.example.githubreposbrowser.features.gitreposlist.details.ui.GithubRepoDetailsDialog;
+import com.example.githubreposbrowser.view.SearchBarHolder;
 
 import java.util.List;
 
@@ -55,20 +56,7 @@ abstract public class BaseRepoListFragment extends BaseFragment {
     protected void setupObservers() {
         super.setupObservers();
         observeNonNull(getViewModel().screenState, this::onScreenStateChanged);
-        observeNonNull(getViewModel().showRepoDetailsDialog, detailsDialogData -> showRepoDetailsDialog(detailsDialogData.repoId(), detailsDialogData.favorite()));
-    }
-
-    protected void showRepoDetailsDialog(@NonNull final Long id, final boolean favorite) {
-        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(id, favorite);
-        dialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
-    }
-
-    @Nullable
-    private SearchBarHolder getSearchBarHolderImpl() {
-        if (getParentFragment() != null && getParentFragment() instanceof SearchBarHolder) {
-            return (SearchBarHolder) getParentFragment();
-        }
-        return null;
+        observeNonNull(getViewModel().showRepoDetailsDialog, this::showRepoDetailsDialog);
     }
 
     protected void initUI() {
@@ -80,6 +68,14 @@ abstract public class BaseRepoListFragment extends BaseFragment {
     protected void setupListeners() {
         super.setupListeners();
         binding.swipeRefreshRepos.setOnRefreshListener(() -> getViewModel().onRefreshRepos());
+    }
+
+    @Nullable
+    private SearchBarHolder getSearchBarHolderImpl() {
+        if (getParentFragment() != null && getParentFragment() instanceof SearchBarHolder) {
+            return (SearchBarHolder) getParentFragment();
+        }
+        return null;
     }
 
     private void onScreenStateChanged(@NonNull final ScreenState state) {
@@ -126,6 +122,11 @@ abstract public class BaseRepoListFragment extends BaseFragment {
         binding.pbRepos.setVisibility(View.GONE);
         binding.groupErrorState.setVisibility(View.VISIBLE);
         binding.tvErrorState.setText(getString(R.string.empty_screen_state_text));
+    }
+
+    private void showRepoDetailsDialog(@NonNull final DetailsDialogData dialogData) {
+        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(dialogData.repoId(), dialogData.favorite());
+        dialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
     }
 
     @Override

@@ -53,7 +53,7 @@ public class GithubRepoDetailViewModel extends BaseViewModel {
     }
 
     private void onFailedDetailsReceive(final Throwable error) {
-        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
+        final String errorContent = parseApiError(error);
         _screenState.setValue(ScreenState.error(errorContent));
     }
 
