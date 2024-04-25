@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
@@ -17,7 +16,6 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.Gith
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -105,13 +103,12 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
         searchReposComposable.add(interactor.searchGithubRepos(searchQuery, filterType, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onReposReceived, this::onFailedReposReceive));
+                .subscribe(this::onReposReceived, error -> onFailedReposReceive(error, refreshing)));
     }
 
     private void onReposReceived(@NonNull final GithubRepoListData listData) {
         totalAvailableItemsCount = listData.totalCount();
         setLoaderItemVisibility(false);
-
 
         if (currentPage > DEF_CURRENT_PAGE) {
             final List<GithubRepo> updatedList = new ArrayList<>(githubRepos);
@@ -128,15 +125,18 @@ public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEv
         }
     }
 
-    private void onFailedReposReceive(final Throwable error) {
+    private void onFailedReposReceive(final Throwable error, final boolean refreshing) {
         // In the case of token overusing skip the paging and apply empty list instead of the next part
+        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
         if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
-            onReposReceived(new GithubRepoListData(totalAvailableItemsCount, Collections.emptyList()));
-            errorToast.setValue(interactor.getString(R.string.error_invalid_token));
+            if (!githubRepos.isEmpty() || (!refreshing && currentPage > DEF_CURRENT_PAGE)) {
+                _screenState.setValue(ScreenState.success(githubRepos));
+            } else {
+                _screenState.setValue(ScreenState.error(errorContent));
+            }
             return;
         }
 
-        final String errorContent = error.getMessage() != null ? error.getMessage() : getBaseErrorDataLoadingText();
         if (currentPage > DEF_CURRENT_PAGE) {
             errorToast.setValue(errorContent);
             return;
