@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/small_margin"
         android:layout_marginTop="@dimen/base_margin"
+        android:textSize="@dimen/base_text_size"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivAvatar"

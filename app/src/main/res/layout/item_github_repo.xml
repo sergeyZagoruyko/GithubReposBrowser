@@ -1,73 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/medium_margin">
+    android:layout_marginHorizontal="@dimen/medium_margin"
+    android:layout_marginVertical="@dimen/small_margin"
+    app:cardCornerRadius="4dp">
 
-    <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="@dimen/big_ic_size"
-        android:layout_height="@dimen/big_ic_size"
-        android:layout_marginStart="@dimen/base_margin"
-        android:layout_marginTop="@dimen/base_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_background" />
-
-    <TextView
-        android:id="@+id/tvOwnerLogin"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/small_margin"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/ivStar"
-        app:layout_constraintStart_toEndOf="@id/ivAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivAvatar"
-        tools:text="SANGAVI146" />
+        android:layout_margin="@dimen/base_margin">
 
-    <TextView
-        android:id="@+id/tvRepoName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x_small_margin"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/tvOwnerLogin"
-        app:layout_constraintStart_toStartOf="@id/tvOwnerLogin"
-        app:layout_constraintTop_toBottomOf="@id/tvOwnerLogin"
-        tools:text="orz-li-gpu" />
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="@dimen/big_ic_size"
+            android:layout_height="@dimen/big_ic_size"
+            android:layout_marginStart="@dimen/base_margin"
+            android:layout_marginTop="@dimen/base_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
 
-    <TextView
-        android:id="@+id/tvRepoDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_marginEnd="@dimen/base_margin"
-        android:ellipsize="end"
-        android:maxLines="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/ivAvatar"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar"
-        tools:text="Bitcoin, Solana, Ethereum, and other private key brute force tool, written in Python. Also can be used as bitcoin wallet and convertor." />
+        <TextView
+            android:id="@+id/tvOwnerLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/small_margin"
+            android:textSize="@dimen/base_text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/ivStar"
+            app:layout_constraintStart_toEndOf="@id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivAvatar"
+            tools:text="SANGAVI146" />
 
-    <ImageView
-        android:id="@+id/ivStar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_star"
-        app:layout_constraintBottom_toBottomOf="@id/tvStarsCount"
-        app:layout_constraintEnd_toStartOf="@id/tvStarsCount"
-        app:layout_constraintTop_toTopOf="@id/tvStarsCount" />
+        <TextView
+            android:id="@+id/tvRepoName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_small_margin"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvOwnerLogin"
+            app:layout_constraintStart_toStartOf="@id/tvOwnerLogin"
+            app:layout_constraintTop_toBottomOf="@id/tvOwnerLogin"
+            tools:text="orz-li-gpu" />
 
-    <TextView
-        android:id="@+id/tvStarsCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_margin"
-        android:layout_marginEnd="@dimen/base_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="14" />
+        <TextView
+            android:id="@+id/tvRepoDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/base_margin"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/ivAvatar"
+            app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+            tools:text="Bitcoin, Solana, Ethereum, and other private key brute force tool, written in Python. Also can be used as bitcoin wallet and convertor." />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/ivStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/tvStarsCount"
+            app:layout_constraintEnd_toStartOf="@id/tvStarsCount"
+            app:layout_constraintTop_toTopOf="@id/tvStarsCount" />
+
+        <TextView
+            android:id="@+id/tvStarsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_margin"
+            android:layout_marginEnd="@dimen/base_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="14" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
