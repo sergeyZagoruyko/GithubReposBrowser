@@ -1,49 +1,25 @@
 package com.example.githubreposbrowser.features.gitreposlist.allrepos.ui;
 
-import static com.example.githubreposbrowser.utils.ViewUtils.setVisibleOrGone;
-
 import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.githubreposbrowser.R;
-import com.example.githubreposbrowser.base.BaseFragment;
-import com.example.githubreposbrowser.data.ScreenState;
-import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
-import com.example.githubreposbrowser.features.SearchBarHolder;
+import com.example.githubreposbrowser.features.gitreposlist.BaseRepoListFragment;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
-import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
-import com.example.githubreposbrowser.features.gitreposlist.details.ui.GithubRepoDetailsDialog;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.utils.PagingScrollChangeListener;
 
-import java.util.List;
+public class ReposListFragment extends BaseRepoListFragment {
 
-public class ReposListFragment extends BaseFragment {
-
-    private FragmentGitReposListBinding binding;
     private ReposListViewModel viewModel;
-
-    @NonNull
-    private final RepoListAdapter adapter = new RepoListAdapter(new OnItemSelectedListener<>() {
-        @Override
-        public void onItemSelected(GithubRepo item) {
-            viewModel.onItemSelected(item);
-        }
-    });
-
-    @Nullable
-    private SearchBarHolder searchBarHolder = null;
+    private FavoriteReposViewModel sharedFavoritesViewModel;
 
     @NonNull
     public static ReposListFragment newInstance() {
@@ -54,16 +30,6 @@ public class ReposListFragment extends BaseFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         getLifecycle().addObserver(viewModel);
-        searchBarHolder = getSearchBarHolderImpl();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        binding = FragmentGitReposListBinding.inflate(inflater, container, false);
-        initUI();
-        return binding.getRoot();
     }
 
     @Override
@@ -71,14 +37,19 @@ public class ReposListFragment extends BaseFragment {
         RepoListFrmComponent component = appComponent.plusRepoListFrm().create();
         component.inject(this);
         viewModel = new ViewModelProvider(this, component.vm()).get(ReposListViewModel.class);
+        sharedFavoritesViewModel = new ViewModelProvider(requireActivity(), component.favoritesSharedVM()).get(FavoriteReposViewModel.class);
+    }
+
+    @NonNull
+    @Override
+    protected BaseRepoViewModel getViewModel() {
+        return viewModel;
     }
 
     @Override
     protected void setupObservers() {
         super.setupObservers();
-        observeNonNull(viewModel.screenState, this::onScreenStateChanged);
         observeNonNull(viewModel.errorToast, text -> Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show());
-        observeNonNull(viewModel.showRepoDetailsDialog, this::showRepoDetailsDialog);
     }
 
     @Override
@@ -98,76 +69,17 @@ public class ReposListFragment extends BaseFragment {
         }
     }
 
-    private void initUI() {
-        binding.rvGithubRepos.setAdapter(adapter);
-        binding.rvGithubRepos.setItemAnimator(null);
-    }
-
-    private void onScreenStateChanged(@NonNull final ScreenState state) {
-        if (state instanceof ScreenState.SuccessResult) {
-            setSuccessState(((ScreenState.SuccessResult<List<GithubRepo>>) state).getData());
-        } else if (state instanceof ScreenState.Error) {
-            setErrorState(((ScreenState.Error) state).getError());
-        } else if (state instanceof ScreenState.Loading loadingState) {
-            setLoadingState(loadingState.isLoading(), loadingState.isRefreshing());
-        } else if (state instanceof ScreenState.Empty) {
-            setEmptyState();
+    @Override
+    protected void initUI() {
+        super.initUI();
+        if (searchBarHolder != null) {
+            searchBarHolder.setSearchItemsVisibility(true);
         }
-    }
-
-    private void setSuccessState(@NonNull final List<GithubRepo> list) {
-        adapter.submitList(list);
-
-        binding.swipeRefreshRepos.setRefreshing(false);
-        binding.rvGithubRepos.setVisibility(View.VISIBLE);
-        binding.groupErrorState.setVisibility(View.GONE);
-        binding.pbRepos.setVisibility(View.GONE);
-    }
-
-    private void setErrorState(@NonNull final String error) {
-        binding.swipeRefreshRepos.setRefreshing(false);
-        binding.rvGithubRepos.setVisibility(View.GONE);
-        binding.groupErrorState.setVisibility(View.VISIBLE);
-        binding.pbRepos.setVisibility(View.GONE);
-
-        binding.tvErrorState.setText(getString(R.string.error_data_loading, error));
-    }
-
-    private void setLoadingState(final boolean loading, final boolean refreshing) {
-        setVisibleOrGone(binding.pbRepos, loading);
-        binding.swipeRefreshRepos.setRefreshing(refreshing);
-
-        binding.rvGithubRepos.setVisibility(View.GONE);
-        binding.groupErrorState.setVisibility(View.GONE);
-    }
-
-    private void setEmptyState() {
-        binding.swipeRefreshRepos.setRefreshing(false);
-        binding.rvGithubRepos.setVisibility(View.GONE);
-        binding.groupErrorState.setVisibility(View.GONE);
-        binding.pbRepos.setVisibility(View.GONE);
-    }
-
-    @Nullable
-    private SearchBarHolder getSearchBarHolderImpl() {
-        if (getParentFragment() != null && getParentFragment() instanceof SearchBarHolder) {
-            return (SearchBarHolder) getParentFragment();
-        }
-        return null;
-    }
-
-    private void showRepoDetailsDialog(@NonNull final Long id) {
-        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(id);
-        dialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (searchBarHolder != null) {
-            searchBarHolder.setOnTextChangeListener(null);
-            searchBarHolder.setOnFilterClickedListener(null);
-        }
         binding.rvGithubRepos.setAdapter(null);
         binding.rvGithubRepos.setOnScrollChangeListener(null);
     }

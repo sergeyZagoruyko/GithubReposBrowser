@@ -7,4 +7,6 @@ public interface SearchBarHolder {
     void setOnTextChangeListener(final OnTextChangedListener listener);
 
     <T> void setOnFilterClickedListener(final OnItemSelectedListener<T> listener);
+
+    void setSearchItemsVisibility(final boolean visible);
 }

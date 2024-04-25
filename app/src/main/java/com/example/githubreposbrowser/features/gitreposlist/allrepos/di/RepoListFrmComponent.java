@@ -1,10 +1,9 @@
 package com.example.githubreposbrowser.features.gitreposlist.allrepos.di;
 
-import androidx.annotation.NonNull;
-
 import com.example.githubreposbrowser.di.scope.PerFragment;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.ReposListFragment;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
 import com.example.githubreposbrowser.utils.ViewModelFactory;
 
 import dagger.Subcomponent;
@@ -20,5 +19,7 @@ public interface RepoListFrmComponent {
 
     ViewModelFactory<ReposListViewModel> vm();
 
-    void inject(@NonNull final ReposListFragment fragment);
+    ViewModelFactory<FavoriteReposViewModel> favoritesSharedVM();
+
+    void inject(final ReposListFragment fragment);
 }

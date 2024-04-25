@@ -4,6 +4,7 @@ import com.example.githubreposbrowser.base.App;
 import com.example.githubreposbrowser.di.module.AppModule;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 import com.example.githubreposbrowser.features.gitreposlist.details.di.GithubRepoDetailsDialogComponent;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposFrmComponent;
 
 import javax.inject.Singleton;
 
@@ -22,6 +23,9 @@ public interface AppComponent {
 
     @NonNull
     RepoListFrmComponent.Factory plusRepoListFrm();
+
+    @NonNull
+    FavoriteReposFrmComponent.Factory plusFavoriteReposFrm();
 
     @NonNull
     GithubRepoDetailsDialogComponent.Factory plusRepoDetailsDialog();

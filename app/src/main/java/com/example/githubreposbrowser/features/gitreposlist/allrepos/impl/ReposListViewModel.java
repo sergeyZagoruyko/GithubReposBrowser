@@ -11,8 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.githubreposbrowser.R;
-import com.example.githubreposbrowser.base.BaseViewModel;
 import com.example.githubreposbrowser.data.ScreenState;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepoListData;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubReposInteractor;
@@ -30,18 +30,12 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.HttpException;
 
-public class ReposListViewModel extends BaseViewModel implements LifecycleEventObserver {
+public class ReposListViewModel extends BaseRepoViewModel implements LifecycleEventObserver {
 
     private static final int DEF_CURRENT_PAGE = 1;
 
     @NonNull
-    private final MutableLiveData<ScreenState> _screenState = new MutableLiveData<>();
-    @NonNull
-    public final LiveData<ScreenState> screenState = _screenState;
-    @NonNull
     public final SingleLiveEvent<String> errorToast = new SingleLiveEvent();
-    @NonNull
-    public final SingleLiveEvent<Long> showRepoDetailsDialog = new SingleLiveEvent();
 
     @NonNull
     private final GithubReposInteractor interactor;
@@ -96,10 +90,6 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
         setLoaderItemVisibility(true);
         _screenState.setValue(ScreenState.success(githubRepos));
         searchGitRepos(searchQuery, currentFilterType, false);
-    }
-
-    public void onItemSelected(@NonNull final GithubRepo item) {
-        showRepoDetailsDialog.setValue(item.id());
     }
 
     private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType,

@@ -23,7 +23,7 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHo
     @NonNull
     protected final OnItemSelectedListener<GithubRepo> onItemSelectedListener;
 
-    protected RepoListAdapter(@NonNull final OnItemSelectedListener<GithubRepo> onItemSelectedListener) {
+    public RepoListAdapter(@NonNull final OnItemSelectedListener<GithubRepo> onItemSelectedListener) {
         super(new GithubRepoDiffUtilCallback());
         this.onItemSelectedListener = onItemSelectedListener;
     }

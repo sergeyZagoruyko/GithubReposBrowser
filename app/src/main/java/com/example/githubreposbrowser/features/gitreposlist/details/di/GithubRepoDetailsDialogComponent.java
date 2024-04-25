@@ -1,7 +1,5 @@
 package com.example.githubreposbrowser.features.gitreposlist.details.di;
 
-import androidx.annotation.NonNull;
-
 import com.example.githubreposbrowser.di.scope.PerFragment;
 import com.example.githubreposbrowser.features.gitreposlist.details.impl.GithubRepoDetailViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.details.ui.GithubRepoDetailsDialog;
@@ -20,5 +18,5 @@ public interface GithubRepoDetailsDialogComponent {
 
     ViewModelFactory<GithubRepoDetailViewModel> vm();
 
-    void inject(@NonNull final GithubRepoDetailsDialog fragment);
+    void inject(final GithubRepoDetailsDialog fragment);
 }

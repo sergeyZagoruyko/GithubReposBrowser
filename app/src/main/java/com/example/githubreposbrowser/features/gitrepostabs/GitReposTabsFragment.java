@@ -1,5 +1,7 @@
 package com.example.githubreposbrowser.features.gitrepostabs;
 
+import static com.example.githubreposbrowser.utils.ViewUtils.setVisibleOrGone;
+
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,8 +22,8 @@ import com.example.githubreposbrowser.databinding.FragmentGitReposTabsBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
-import com.example.githubreposbrowser.listeners.OnTextChangedListener;
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
+import com.example.githubreposbrowser.listeners.OnTextChangedListener;
 import com.example.githubreposbrowser.utils.ViewUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -77,6 +79,12 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
 
     public <T> void setOnFilterClickedListener(@Nullable OnItemSelectedListener<T> onFilterClickedListener) {
         this.onFilterClickedListener = onFilterClickedListener;
+    }
+
+    @Override
+    public void setSearchItemsVisibility(boolean visible) {
+        setVisibleOrGone(binding.searchView, visible);
+        setVisibleOrGone(binding.ivFilter, visible);
     }
 
     private void initUI() {
