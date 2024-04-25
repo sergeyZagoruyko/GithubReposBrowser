@@ -1,11 +1,11 @@
-package com.example.githubreposbrowser.features.gitreposlist.allrepos.repository;
+package com.example.githubreposbrowser.features.gitreposlist.allrepos.data;
 
 import com.google.gson.annotations.SerializedName;
 
 public record GithubRepoResponse(@SerializedName("id") long id, @SerializedName("owner") OwnerResponse owner,
                                  @SerializedName("name") String name,
                                  @SerializedName("description") String description,
-                                 @SerializedName("stargazers_count") int startsCount) {
+                                 @SerializedName("stargazers_count") int starsCount) {
 
     @Override
     public long id() {
@@ -22,9 +22,8 @@ public record GithubRepoResponse(@SerializedName("id") long id, @SerializedName(
         return description;
     }
 
-    @Override
-    public int startsCount() {
-        return startsCount;
+    public int starsCount() {
+        return starsCount;
     }
 
     public String getOwnerLogin() {
@@ -33,18 +32,5 @@ public record GithubRepoResponse(@SerializedName("id") long id, @SerializedName(
 
     public String getAvatarUrl() {
         return owner.avatarUrl();
-    }
-}
-
-record OwnerResponse(@SerializedName("login") String login, @SerializedName("avatar_url") String avatarUrl) {
-
-    @Override
-    public String login() {
-        return login;
-    }
-
-    @Override
-    public String avatarUrl() {
-        return avatarUrl;
     }
 }

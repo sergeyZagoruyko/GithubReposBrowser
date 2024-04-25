@@ -12,6 +12,7 @@ import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.databinding.ItemGithubRepoBinding;
 import com.example.githubreposbrowser.databinding.ItemLoaderBinding;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
+import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.view.LoaderIListItemViewHolder;
 
 public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHolder> {
@@ -19,8 +20,12 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHo
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_LOADER = 1;
 
-    protected RepoListAdapter() {
+    @NonNull
+    protected final OnItemSelectedListener<GithubRepo> onItemSelectedListener;
+
+    protected RepoListAdapter(@NonNull final OnItemSelectedListener<GithubRepo> onItemSelectedListener) {
         super(new GithubRepoDiffUtilCallback());
+        this.onItemSelectedListener = onItemSelectedListener;
     }
 
     @Override
@@ -50,7 +55,7 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHo
         }
     }
 
-    static class ItemViewHolder extends RecyclerView.ViewHolder {
+    class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
         private final ItemGithubRepoBinding binding;
@@ -69,6 +74,8 @@ public class RepoListAdapter extends ListAdapter<GithubRepo, RecyclerView.ViewHo
             binding.tvRepoName.setText(item.repoName());
             binding.tvRepoDesc.setText(item.description());
             binding.tvStarsCount.setText(String.valueOf(item.starsCount()));
+
+            binding.getRoot().setOnClickListener(v -> onItemSelectedListener.onItemSelected(item));
         }
     }
 

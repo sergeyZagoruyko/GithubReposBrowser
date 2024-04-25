@@ -17,6 +17,7 @@
     <dimen name="base_ic_size">24dp</dimen>
     <dimen name="medium_ic_size">48dp</dimen>
     <dimen name="big_ic_size">64dp</dimen>
+    <dimen name="x_big_ic_size">82dp</dimen>
 
     <dimen name="item_loader_height">48dp</dimen>
 </resources>

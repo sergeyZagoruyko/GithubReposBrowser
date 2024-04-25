@@ -21,7 +21,7 @@ import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 import com.example.githubreposbrowser.listeners.OnTextChangedListener;
-import com.example.githubreposbrowser.listeners.onItemSelectedListener;
+import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.utils.ViewUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -35,7 +35,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
     @Nullable
     private OnTextChangedListener onSearchTextChanged = null;
     @Nullable
-    private onItemSelectedListener onFilterClickedListener = null;
+    private OnItemSelectedListener onFilterClickedListener = null;
 
     @NonNull
     private final CompositeDisposable searchInputDisposable = new CompositeDisposable();
@@ -75,7 +75,7 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
         onSearchTextChanged = listener;
     }
 
-    public <T> void setOnFilterClickedListener(@Nullable onItemSelectedListener<T> onFilterClickedListener) {
+    public <T> void setOnFilterClickedListener(@Nullable OnItemSelectedListener<T> onFilterClickedListener) {
         this.onFilterClickedListener = onFilterClickedListener;
     }
 

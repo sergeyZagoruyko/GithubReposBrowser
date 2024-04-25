@@ -23,7 +23,8 @@ import com.example.githubreposbrowser.features.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
-import com.example.githubreposbrowser.listeners.onItemSelectedListener;
+import com.example.githubreposbrowser.features.gitreposlist.details.ui.GithubRepoDetailsDialog;
+import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.utils.PagingScrollChangeListener;
 
 import java.util.List;
@@ -34,7 +35,12 @@ public class ReposListFragment extends BaseFragment {
     private ReposListViewModel viewModel;
 
     @NonNull
-    private final RepoListAdapter adapter = new RepoListAdapter();
+    private final RepoListAdapter adapter = new RepoListAdapter(new OnItemSelectedListener<>() {
+        @Override
+        public void onItemSelected(GithubRepo item) {
+            viewModel.onItemSelected(item);
+        }
+    });
 
     @Nullable
     private SearchBarHolder searchBarHolder = null;
@@ -72,6 +78,7 @@ public class ReposListFragment extends BaseFragment {
         super.setupObservers();
         observeNonNull(viewModel.screenState, this::onScreenStateChanged);
         observeNonNull(viewModel.errorToast, text -> Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show());
+        observeNonNull(viewModel.showRepoDetailsDialog, this::showRepoDetailsDialog);
     }
 
     @Override
@@ -80,7 +87,7 @@ public class ReposListFragment extends BaseFragment {
         if (searchBarHolder != null) {
             searchBarHolder.setOnTextChangeListener(text -> viewModel.onSearchTextEntered(text));
             searchBarHolder.setOnFilterClickedListener(viewModel::onFilterItemSelected);
-            searchBarHolder.setOnFilterClickedListener((onItemSelectedListener<GitReposFilterType>) item ->
+            searchBarHolder.setOnFilterClickedListener((OnItemSelectedListener<GitReposFilterType>) item ->
                     viewModel.onFilterItemSelected(item));
         }
         binding.swipeRefreshRepos.setOnRefreshListener(() -> viewModel.onRefreshRepos());
@@ -123,7 +130,7 @@ public class ReposListFragment extends BaseFragment {
         binding.groupErrorState.setVisibility(View.VISIBLE);
         binding.pbRepos.setVisibility(View.GONE);
 
-        binding.tvErrorState.setText(getString(R.string.error_data_loading_schema, error));
+        binding.tvErrorState.setText(getString(R.string.error_data_loading, error));
     }
 
     private void setLoadingState(final boolean loading, final boolean refreshing) {
@@ -147,6 +154,11 @@ public class ReposListFragment extends BaseFragment {
             return (SearchBarHolder) getParentFragment();
         }
         return null;
+    }
+
+    private void showRepoDetailsDialog(@NonNull final Long id) {
+        final GithubRepoDetailsDialog dialog = GithubRepoDetailsDialog.newInstance(id);
+        dialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
     }
 
     @Override

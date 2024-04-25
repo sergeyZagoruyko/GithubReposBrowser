@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features.gitreposlist.allrepos.repository;
+package com.example.githubreposbrowser.features.gitreposlist.allrepos.data;
 
 import com.google.gson.annotations.SerializedName;
 

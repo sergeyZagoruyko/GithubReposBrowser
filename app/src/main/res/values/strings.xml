@@ -10,7 +10,15 @@
 
     <string name="repo_description_default_mock">Text description with all the major repository information</string>
 
-    <string name="error_data_loading_schema">Failed to load data: %s</string>
+    <string name="repo_details_dialog_title">Repository details</string>
+    <plurals name="details_forks_count">
+        <item quantity="one">%s fork</item>
+        <item quantity="other">%s forks</item>
+    </plurals>
+    <string name="details_prog_lang_prefix">Written with %s</string>
+
+    <string name="base_error_text">Failed to load data</string>
+    <string name="error_data_loading">Failed to load data: %s</string>
     <string name="error_invalid_token">API requests limit reached. Please try again after some time.</string>
     <string name="network_not_available">Seems like Network is not available.</string>
 </resources>

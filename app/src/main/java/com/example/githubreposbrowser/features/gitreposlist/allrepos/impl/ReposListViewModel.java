@@ -40,10 +40,11 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
     public final LiveData<ScreenState> screenState = _screenState;
     @NonNull
     public final SingleLiveEvent<String> errorToast = new SingleLiveEvent();
+    @NonNull
+    public final SingleLiveEvent<Long> showRepoDetailsDialog = new SingleLiveEvent();
 
     @NonNull
     private final GithubReposInteractor interactor;
-
     @NonNull
     private final CompositeDisposable searchReposComposable = new CompositeDisposable();
 
@@ -61,6 +62,7 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
 
     @Inject
     public ReposListViewModel(@NonNull final GithubReposInteractor interactor) {
+        super(interactor);
         this.interactor = interactor;
     }
 
@@ -73,7 +75,6 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
 
     public void onRefreshRepos() {
         currentPage = DEF_CURRENT_PAGE;
-        githubRepos = new ArrayList<>();
         searchGitRepos(searchQuery, currentFilterType, true);
     }
 
@@ -97,6 +98,9 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
         searchGitRepos(searchQuery, currentFilterType, false);
     }
 
+    public void onItemSelected(@NonNull final GithubRepo item) {
+        showRepoDetailsDialog.setValue(item.id());
+    }
 
     private void searchGitRepos(@Nullable final String searchQuery, @NonNull final GitReposFilterType filterType,
                                 final boolean refreshing) {
@@ -127,14 +131,13 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
 
     private void onFailedReposReceive(final Throwable error) {
         // In the case of token overusing skip the paging and apply empty list instead of the next part
-        if (currentPage > DEF_CURRENT_PAGE
-                && error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
+        if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
             onReposReceived(new GithubRepoListData(totalAvailableItemsCount, Collections.emptyList()));
             errorToast.setValue(interactor.getString(R.string.error_invalid_token));
             return;
         }
 
-        final String errorContent = error.getMessage() != null ? error.getMessage() : "";
+        final String errorContent = error.getMessage() != null ? error.getMessage() : getBasicErrorText();
         if (currentPage > DEF_CURRENT_PAGE) {
             errorToast.setValue(errorContent);
             return;

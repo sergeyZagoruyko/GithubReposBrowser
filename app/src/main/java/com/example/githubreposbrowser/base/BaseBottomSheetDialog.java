@@ -6,14 +6,14 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.utils.LiveDataUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-abstract public class BaseFragment extends Fragment {
+abstract public class BaseBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -25,17 +25,12 @@ abstract public class BaseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObservers();
-        setupListeners();
     }
 
-    protected abstract void setupDI(AppComponent appComponent);
+    protected void setupDI(AppComponent appComponent) {
+    }
 
     protected void setupObservers() {
-
-    }
-
-    protected void setupListeners() {
-
     }
 
     protected <T> void observeNonNull(@NonNull final LiveData<T> liveData, @NonNull final Observer<T> observer) {

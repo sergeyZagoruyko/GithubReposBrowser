@@ -1,6 +1,6 @@
 package com.example.githubreposbrowser.listeners;
 
 @FunctionalInterface
-public interface onItemSelectedListener<T> {
+public interface OnItemSelectedListener<T> {
     void onItemSelected(final T item);
 }

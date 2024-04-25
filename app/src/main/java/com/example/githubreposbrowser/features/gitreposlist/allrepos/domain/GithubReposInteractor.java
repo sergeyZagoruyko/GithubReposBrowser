@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.githubreposbrowser.base.BaseInteractor;
-import com.example.githubreposbrowser.features.gitreposlist.allrepos.repository.GithubRepoRepository;
+import com.example.githubreposbrowser.features.gitreposlist.allrepos.data.GithubRepoRepository;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 
 import java.util.List;

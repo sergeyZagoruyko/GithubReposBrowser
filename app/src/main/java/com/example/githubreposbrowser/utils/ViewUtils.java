@@ -14,9 +14,12 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class ViewUtils {
+abstract public class ViewUtils {
 
     private static final long SEARCH_INPUT_DEBOUNCE_MS = 250;
+
+    private ViewUtils() {
+    }
 
     public static Disposable initAsyncTextChangeHandling(SearchView searchView, OnTextChangedListener callback) {
         return Observable.create((ObservableOnSubscribe<String>) emitter -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
