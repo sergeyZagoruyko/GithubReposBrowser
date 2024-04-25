@@ -5,7 +5,7 @@ import com.example.githubreposbrowser.di.module.AppModule;
 import com.example.githubreposbrowser.di.module.DbModule;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 import com.example.githubreposbrowser.features.gitreposlist.details.di.GithubRepoDetailsDialogComponent;
-import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposFrmComponent;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.di.FavoriteReposFrmComponent;
 
 import javax.inject.Singleton;
 

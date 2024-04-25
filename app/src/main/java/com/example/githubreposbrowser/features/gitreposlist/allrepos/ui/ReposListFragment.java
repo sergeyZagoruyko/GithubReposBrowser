@@ -12,7 +12,7 @@ import com.example.githubreposbrowser.features.gitreposlist.BaseRepoListFragment
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.di.RepoListFrmComponent;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.impl.ReposListViewModel;
-import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.impl.FavoriteReposViewModel;
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.utils.PagingScrollChangeListener;
 

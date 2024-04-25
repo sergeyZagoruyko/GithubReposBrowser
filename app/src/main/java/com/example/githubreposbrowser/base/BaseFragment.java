@@ -31,11 +31,9 @@ abstract public class BaseFragment extends Fragment {
     protected abstract void setupDI(AppComponent appComponent);
 
     protected void setupObservers() {
-
     }
 
     protected void setupListeners() {
-
     }
 
     protected <T> void observeNonNull(@NonNull final LiveData<T> liveData, @NonNull final Observer<T> observer) {

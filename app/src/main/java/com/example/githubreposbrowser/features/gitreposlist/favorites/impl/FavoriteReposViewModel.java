@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features.gitreposlist.favorites;
+package com.example.githubreposbrowser.features.gitreposlist.favorites.impl;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -12,6 +12,7 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoVie
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.details.domain.GithubRepoDetails;
 import com.example.githubreposbrowser.features.gitreposlist.details.ui.DetailsDialogData;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.domain.FavoritesInteractor;
 import com.example.githubreposbrowser.utils.SingleLiveEvent;
 
 import java.util.ArrayList;

@@ -15,7 +15,7 @@ import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.data.ScreenState;
 import com.example.githubreposbrowser.databinding.FragmentGitReposListBinding;
-import com.example.githubreposbrowser.features.SearchBarHolder;
+import com.example.githubreposbrowser.view.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.RepoListAdapter;

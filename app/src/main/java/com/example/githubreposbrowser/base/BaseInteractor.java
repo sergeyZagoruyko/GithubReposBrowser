@@ -7,8 +7,6 @@ import com.example.githubreposbrowser.utils.ResourceManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
@@ -37,7 +35,7 @@ abstract public class BaseInteractor {
         try {
             final ResponseBody errorBody = ((HttpException) error).response().errorBody();
             final String errorJson = errorBody.string();
-            final JsonObject jsonObj = new JsonParser().parse(errorJson).getAsJsonObject();
+            final JsonObject jsonObj = jsonParser.parse(errorJson).getAsJsonObject();
             if (jsonObj.has(JSON_KEY_ERROR_MESSAGE)) {
                 errorContent = jsonObj.get(JSON_KEY_ERROR_MESSAGE).getAsString();
             }

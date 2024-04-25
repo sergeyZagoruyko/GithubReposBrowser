@@ -1,6 +1,8 @@
-package com.example.githubreposbrowser.features.gitreposlist.favorites;
+package com.example.githubreposbrowser.features.gitreposlist.favorites.di;
 
 import com.example.githubreposbrowser.di.scope.PerFragment;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.ui.FavoriteReposFragment;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.impl.FavoriteReposViewModel;
 import com.example.githubreposbrowser.utils.ViewModelFactory;
 
 import dagger.Subcomponent;

@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features.gitreposlist.favorites;
+package com.example.githubreposbrowser.features.gitreposlist.favorites.ui;
 
 import android.content.Context;
 
@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.githubreposbrowser.di.component.AppComponent;
 import com.example.githubreposbrowser.features.gitreposlist.BaseRepoListFragment;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.BaseRepoViewModel;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.di.FavoriteReposFrmComponent;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.impl.FavoriteReposViewModel;
 
 public class FavoriteReposFragment extends BaseRepoListFragment {
 

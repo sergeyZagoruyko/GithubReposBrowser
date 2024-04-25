@@ -20,7 +20,7 @@ import com.example.githubreposbrowser.R;
 import com.example.githubreposbrowser.base.BaseFragment;
 import com.example.githubreposbrowser.databinding.FragmentGitReposTabsBinding;
 import com.example.githubreposbrowser.di.component.AppComponent;
-import com.example.githubreposbrowser.features.SearchBarHolder;
+import com.example.githubreposbrowser.view.SearchBarHolder;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.ui.GitReposFilterType;
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.listeners.OnTextChangedListener;
@@ -59,7 +59,6 @@ public class GitReposTabsFragment extends BaseFragment implements SearchBarHolde
 
     @Override
     public void setupDI(AppComponent appComponent) {
-
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.Gith
 import com.example.githubreposbrowser.features.gitreposlist.details.di.GithubRepoDetailsDialogComponent;
 import com.example.githubreposbrowser.features.gitreposlist.details.domain.GithubRepoDetails;
 import com.example.githubreposbrowser.features.gitreposlist.details.impl.GithubRepoDetailViewModel;
-import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.impl.FavoriteReposViewModel;
 
 public class GithubRepoDetailsDialog extends BaseBottomSheetDialog {
 

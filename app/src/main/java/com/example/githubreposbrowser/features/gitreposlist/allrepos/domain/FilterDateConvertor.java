@@ -16,14 +16,15 @@ import javax.inject.Inject;
 public class FilterDateConvertor {
 
     private static final String DATE_FILTER_TYPE_PREFIX = "created:";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     @Inject
     public FilterDateConvertor() {
     }
 
     public String getDateRange(@NonNull final GitReposFilterType filterType) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        final Calendar calendar = Calendar.getInstance();
 
         switch (filterType) {
             case LAST_DAY -> calendar.add(Calendar.DAY_OF_MONTH, -1);

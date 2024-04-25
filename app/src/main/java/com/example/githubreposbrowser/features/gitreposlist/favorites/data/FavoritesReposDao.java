@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features.gitreposlist.favorites;
+package com.example.githubreposbrowser.features.gitreposlist.favorites.data;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

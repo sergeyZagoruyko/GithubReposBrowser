@@ -3,7 +3,7 @@ package com.example.githubreposbrowser.features.gitreposlist.details.di;
 import com.example.githubreposbrowser.di.scope.PerFragment;
 import com.example.githubreposbrowser.features.gitreposlist.details.impl.GithubRepoDetailViewModel;
 import com.example.githubreposbrowser.features.gitreposlist.details.ui.GithubRepoDetailsDialog;
-import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoriteReposViewModel;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.impl.FavoriteReposViewModel;
 import com.example.githubreposbrowser.utils.ViewModelFactory;
 
 import dagger.Subcomponent;

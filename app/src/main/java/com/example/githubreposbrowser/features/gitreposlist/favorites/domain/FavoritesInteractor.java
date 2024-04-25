@@ -1,10 +1,11 @@
-package com.example.githubreposbrowser.features.gitreposlist.favorites;
+package com.example.githubreposbrowser.features.gitreposlist.favorites.domain;
 
 import androidx.annotation.NonNull;
 
 import com.example.githubreposbrowser.base.BaseInteractor;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepo;
 import com.example.githubreposbrowser.features.gitreposlist.allrepos.domain.GithubRepoMapper;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.data.FavoritesReposDao;
 
 import java.util.List;
 import java.util.stream.Collectors;

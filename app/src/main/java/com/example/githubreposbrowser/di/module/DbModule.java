@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.githubreposbrowser.db.ReposDB;
-import com.example.githubreposbrowser.features.gitreposlist.favorites.FavoritesReposDao;
+import com.example.githubreposbrowser.features.gitreposlist.favorites.data.FavoritesReposDao;
 
 import javax.inject.Singleton;
 

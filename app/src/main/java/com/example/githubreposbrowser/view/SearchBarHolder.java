@@ -1,4 +1,4 @@
-package com.example.githubreposbrowser.features;
+package com.example.githubreposbrowser.view;
 
 import com.example.githubreposbrowser.listeners.OnItemSelectedListener;
 import com.example.githubreposbrowser.listeners.OnTextChangedListener;
