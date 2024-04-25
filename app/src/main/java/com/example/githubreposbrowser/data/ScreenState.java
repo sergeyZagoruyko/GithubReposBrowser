@@ -54,7 +54,9 @@ public abstract class ScreenState {
         }
     }
 
-    // Factory methods
+    public static final class Empty extends ScreenState {
+    }
+
     public static <T> ScreenState success(@NonNull final T data) {
         return new SuccessResult<T>(data);
     }
@@ -65,5 +67,9 @@ public abstract class ScreenState {
 
     public static ScreenState loading(final boolean loading, final boolean refreshing) {
         return new Loading(loading, refreshing);
+    }
+
+    public static ScreenState empty() {
+        return new ScreenState.Empty();
     }
 }

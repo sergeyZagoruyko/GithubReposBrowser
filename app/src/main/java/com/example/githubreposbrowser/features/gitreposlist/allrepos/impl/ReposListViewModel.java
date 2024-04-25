@@ -118,12 +118,17 @@ public class ReposListViewModel extends BaseViewModel implements LifecycleEventO
         updatedList.addAll(listData.items());
         githubRepos = updatedList;
 
-        _screenState.setValue(ScreenState.success(githubRepos));
+        if (!githubRepos.isEmpty()) {
+            _screenState.setValue(ScreenState.success(githubRepos));
+        } else {
+            _screenState.setValue(ScreenState.empty());
+        }
     }
 
     private void onFailedReposReceive(final Throwable error) {
-        // In the case of token overusing skil paging and apply empty list instead of the next part
-        if (error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
+        // In the case of token overusing skip the paging and apply empty list instead of the next part
+        if (currentPage > DEF_CURRENT_PAGE
+                && error instanceof HttpException && ((HttpException) error).code() == API_ERROR_STATUS_CODE_AUTH_FAILED) {
             onReposReceived(new GithubRepoListData(totalAvailableItemsCount, Collections.emptyList()));
             errorToast.setValue(interactor.getString(R.string.error_invalid_token));
             return;

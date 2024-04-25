@@ -52,7 +52,6 @@ public class GithubReposInteractor extends BaseInteractor {
 
     @NonNull
     private String buildSearchRequestQuery(@Nullable final String query, @NonNull final GitReposFilterType filterType) {
-        // TODO: Replace mocking code with impl once UI is ready
         final StringBuilder resultQueryBuilder = new StringBuilder();
         final String filterDateQuery = filterDateConvertor.getDateRange(filterType);
 

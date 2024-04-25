@@ -8,6 +8,8 @@
     <string name="git_repos_filter_type_last_week">Week</string>
     <string name="git_repos_filter_type_last_month">Month</string>
 
+    <string name="repo_description_default_mock">Text description with all the major repository information</string>
+
     <string name="error_data_loading_schema">Failed to load data: %s</string>
     <string name="error_invalid_token">API requests limit reached. Please try again after some time.</string>
     <string name="network_not_available">Seems like Network is not available.</string>

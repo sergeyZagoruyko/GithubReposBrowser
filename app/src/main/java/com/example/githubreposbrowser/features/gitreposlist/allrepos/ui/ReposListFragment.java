@@ -101,9 +101,10 @@ public class ReposListFragment extends BaseFragment {
             setSuccessState(((ScreenState.SuccessResult<List<GithubRepo>>) state).getData());
         } else if (state instanceof ScreenState.Error) {
             setErrorState(((ScreenState.Error) state).getError());
-        } else if (state instanceof final ScreenState.Loading loadingState) {
+        } else if (state instanceof ScreenState.Loading loadingState) {
             setLoadingState(loadingState.isLoading(), loadingState.isRefreshing());
-
+        } else if (state instanceof ScreenState.Empty) {
+            setEmptyState();
         }
     }
 
@@ -131,6 +132,13 @@ public class ReposListFragment extends BaseFragment {
 
         binding.rvGithubRepos.setVisibility(View.GONE);
         binding.groupErrorState.setVisibility(View.GONE);
+    }
+
+    private void setEmptyState() {
+        binding.swipeRefreshRepos.setRefreshing(false);
+        binding.rvGithubRepos.setVisibility(View.GONE);
+        binding.groupErrorState.setVisibility(View.GONE);
+        binding.pbRepos.setVisibility(View.GONE);
     }
 
     @Nullable
