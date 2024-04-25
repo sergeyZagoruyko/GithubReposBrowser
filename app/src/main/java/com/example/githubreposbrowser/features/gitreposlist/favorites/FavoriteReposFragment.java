@@ -24,6 +24,14 @@ public class FavoriteReposFragment extends BaseRepoListFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (searchBarHolder != null) {
+            searchBarHolder.setSearchItemsVisibility(false);
+        }
+    }
+
+    @Override
     public void setupDI(AppComponent appComponent) {
         FavoriteReposFrmComponent component = appComponent.plusFavoriteReposFrm().create();
         component.inject(this);
@@ -34,13 +42,5 @@ public class FavoriteReposFragment extends BaseRepoListFragment {
     @Override
     protected BaseRepoViewModel getViewModel() {
         return viewModel;
-    }
-
-    @Override
-    protected void initUI() {
-        super.initUI();
-        if (searchBarHolder != null) {
-            searchBarHolder.setSearchItemsVisibility(false);
-        }
     }
 }

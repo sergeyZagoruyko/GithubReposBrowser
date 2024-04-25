@@ -33,6 +33,14 @@ public class ReposListFragment extends BaseRepoListFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (searchBarHolder != null) {
+            searchBarHolder.setSearchItemsVisibility(true);
+        }
+    }
+
+    @Override
     public void setupDI(AppComponent appComponent) {
         RepoListFrmComponent component = appComponent.plusRepoListFrm().create();
         component.inject(this);
@@ -51,14 +59,6 @@ public class ReposListFragment extends BaseRepoListFragment {
         super.setupObservers();
         observeNonNull(viewModel.errorToast, text -> Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show());
         observeNonNull(sharedFavoritesViewModel.favoriteIds, ids -> viewModel.onFavoriteIdsChanged(ids));
-    }
-
-    @Override
-    protected void initUI() {
-        super.initUI();
-        if (searchBarHolder != null) {
-            searchBarHolder.setSearchItemsVisibility(true);
-        }
     }
 
     @Override
