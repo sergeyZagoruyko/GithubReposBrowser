@@ -42,8 +42,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onProvideAssistContent(AssistContent outContent) {
-        super.onProvideAssistContent(outContent);
+    protected void onPause() {
+        super.onPause();
         App.getInstance().setExpiredTokenListener(null);
     }
 
